@@ -78,8 +78,7 @@ bool isNonKeyId(string s)
 	{
 		return false;
 	}
-	
-	
+		
 	// FIXME: Not fully implemented
 	return true;
 }
@@ -161,6 +160,9 @@ void Compiler::createListingHeader()
 	// The following needs to be sent to the listing file.";
 	listingFile << "STAGE0:" << setw(2) << names << setw(6) << ctime(&now)<< endl; 
 	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
+	listingFile << "n";
 }
+
+
 
 
