@@ -64,8 +64,28 @@ bool isNonKeyId(string s)
 	// Link: https://learn-us-east-1-prod-fleet02-xythos.content.blackboardcdn.com/5fb6991aeccdc/8415552?X-Blackboard-S3-Bucket=learn-us-east-1-prod-fleet01-xythos&X-Blackboard-Expiration=1698354000000&X-Blackboard-Signature=07hLtQS5MseGUxbACX0NdjbnrNDG7Xlf9LHHrh8at5U%3D&X-Blackboard-Client-Id=100963&X-Blackboard-S3-Region=us-east-1&response-cache-control=private%2C%20max-age%3D21600&response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27LanguageDefinitionAndGrammar.pdf&response-content-type=application%2Fpdf&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFEaCXVzLWVhc3QtMSJIMEYCIQDNixLw7uh5rgLDTo4lZxlJPXQjxBXUxoXDX9Ma%2BOOj5QIhAKPWP8u9rbxVXwsTtsGbah7RY4PCDEj5X8nagAH%2ByN8hKrMFCHoQAxoMNjM1NTY3OTI0MTgzIgxUBTxoTkI0SNlskXUqkAWn1CVwY%2F0zzTnmAn8hTVrlDzxk7k3G0U2Jr4Nu4G0frmEbV04b5x%2BJYINu4iEcixqIYnWE32azcow%2BXkfg6xPxCK2VAN9oAHi3si6HhZ9TGw6sT%2BXQDq91PwTM5cMtJjQKWerl1VeuPvgQF4%2FrEY94aaawduhGPCX%2F9%2F0k1NcGjEMzBNv4Rbbw9rADkStVoSZ0o7zlsQVPdNlmlTIBtEZnsnDv6lZuFBPaBLv82FgcyMQx8OrkOpANi01%2BjFTHgvtTqNqu4KniNqIsbIptHbZMc0ZR9vEklh6Fgr3UPKKV7vhuIFzqT8i0caLHNizcqQh%2FUMFdIz1G8%2FZzOfALa9jsuBkvvOoorGe0MgErgNd3oBbt57B%2F1TNzC2hdAve4xM5egibICEK7%2Bb0aTrCHZk8I3Mmb4fY5l7VDHHWcZGu2oNaf5YSNjv%2B%2FN5pxhsLhPwzCrtSP6ROoqvj%2BoF5GzOYB%2B0cn8oPwVanaax2JDCG%2FSeQhez6yAxrn%2BuzE45q3StTYqomBOGYIbIThzF4QnSHVpoV1R1mBYE6ECYTJs7ClItTgOX3pWTHGFtLlVv2Bxd4Dnkb5H%2BCwEzeil2ZQ1jSFGlExKQjY4eqaIDm%2BaQH0JsGcpGVnu%2BNDFOja5lQ45T0QSfVHTR5x32CQuJLnjQwvKR%2B2jBItNr1rHQJTvypp17vLlCjqymA1Ym1GMTTPJqTm6%2BY6vfLtnmYmdJ1VK%2FW%2BvUVYdiqqyzUZRl5mSrT6gWDwADt2m7g%2B9tg6D6L0cyRWhxy%2Bze6nQBzEBPSLhKYNoxC6H82S0abzbR4cRMFJV0cmBAeRefjHZj4KfdZUpcQm7rwL0eZmUPOS5ND%2FIxeeREQ9NcfH0qkhTwOSP1aaAzC0suqpBjqwAYzs5XLa4enCLihgwWGpgT4Fhy71p6UJiJ5T7KmpudMd48fk2q0fo37x93n%2B7hNfXn965BAPgjYoUw9kGMWBOewCWeYAIQolg6%2FZdQTsISdocD7nav%2BAIL%2BoH4Cvm5PseNwkOLbD767ShrhO2eJLCJfKjpFDN47JZB6eXNpy7VH5eem1W5qKeLrSbHYNzNmT0Qx0faB76VXRiwKn8ku%2B4s2uIti%2FB5gGw67221KrSpCf&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20231026T150000Z&X-Amz-SignedHeaders=host&X-Amz-Expires=21600&X-Amz-Credential=ASIAZH6WM4PL2AH7V2MG%2F20231026%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1069f4ce646ef4b5ca64fe7222a94fcb9859937463307af11429737c6ea957d6
 	// ALPHA ALPHANUMS
 	// ALPHA (lowercase letters) | NUM (0-9)
+	
+	// Only one underscore is syntatically correct.
+	int underscoreCount = 0;
 	for (size_t i = 0; i < s.length(); ++i)
 	{
+		if (isSpecialSymbol(s[i]))
+		{
+			if (s[i] != '_')
+			{
+				return false;
+			}
+			else
+			{
+				// Only one underscore is syntatically correct.
+				++underscoreCount;
+				if (underscoreCount > 1)
+				{
+					return false;
+				}
+			}
+		}
+		
 		if (!isdigit(s[i]) && !islower(s[i]) && (s[i] != '_'))
 		{
 			return false;
@@ -162,7 +182,4 @@ void Compiler::createListingHeader()
 	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
 	listingFile << "n";
 }
-
-
-
 
