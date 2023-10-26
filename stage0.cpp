@@ -49,11 +49,11 @@ void Compiler::nextToken()
 	{
 		if (ch == '{')
 		{
-			
+			// FIXME: Not Finished
 		}
 		else if (ch == '}')
 		{
-			
+			// FIXME: Not Finished			
 		}
 		else if (isspace(ch))
 		{
@@ -86,3 +86,4 @@ void Compiler::nextChar()
 		
 	}
 }
+
