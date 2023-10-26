@@ -8,6 +8,7 @@
 
 // Helper Functions
 
+/*
 bool isKeyword(string s) const  // determines if s is a keyword
 {
 	
@@ -22,14 +23,17 @@ bool isInteger(string s) const  // determines if s is an integer
 {
 	
 }
+*/
 bool isBoolean(string s) const  // determines if s is a boolean
 {
 	return ((s == "true") || (s == "false"));
 }
+/*
 bool isLiteral(string s) const  // determines if s is a literal
 {
 
 }
+*/
 
 
 
@@ -96,8 +100,15 @@ void Compiler::nextToken()
 		}
 		else if (islower(ch))
 		{
+			// FIXME: Not finished
+		}
+		else if (isdigit(ch))
+		{
+			// FIXME: Not finished
+		}
+		else if (END_OF_FILE)
+		{
 			token = ch;
-			while (nextChar()
 		}
 	}
 	return token;
@@ -121,5 +132,3 @@ char Compiler::nextChar()
 		
 	}
 }
-
-
