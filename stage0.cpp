@@ -52,6 +52,39 @@ bool isSpecialSymbol(char c)
 	return symFound;
 }
 
+bool isNonKeyId(string s)
+{
+	// Check if it's a keyword obviously.
+	if (isKeyword(s))
+	{
+		return false;
+	}
+	
+	// Defintions found in 9-10
+	// Link: https://learn-us-east-1-prod-fleet02-xythos.content.blackboardcdn.com/5fb6991aeccdc/8415552?X-Blackboard-S3-Bucket=learn-us-east-1-prod-fleet01-xythos&X-Blackboard-Expiration=1698354000000&X-Blackboard-Signature=07hLtQS5MseGUxbACX0NdjbnrNDG7Xlf9LHHrh8at5U%3D&X-Blackboard-Client-Id=100963&X-Blackboard-S3-Region=us-east-1&response-cache-control=private%2C%20max-age%3D21600&response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27LanguageDefinitionAndGrammar.pdf&response-content-type=application%2Fpdf&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFEaCXVzLWVhc3QtMSJIMEYCIQDNixLw7uh5rgLDTo4lZxlJPXQjxBXUxoXDX9Ma%2BOOj5QIhAKPWP8u9rbxVXwsTtsGbah7RY4PCDEj5X8nagAH%2ByN8hKrMFCHoQAxoMNjM1NTY3OTI0MTgzIgxUBTxoTkI0SNlskXUqkAWn1CVwY%2F0zzTnmAn8hTVrlDzxk7k3G0U2Jr4Nu4G0frmEbV04b5x%2BJYINu4iEcixqIYnWE32azcow%2BXkfg6xPxCK2VAN9oAHi3si6HhZ9TGw6sT%2BXQDq91PwTM5cMtJjQKWerl1VeuPvgQF4%2FrEY94aaawduhGPCX%2F9%2F0k1NcGjEMzBNv4Rbbw9rADkStVoSZ0o7zlsQVPdNlmlTIBtEZnsnDv6lZuFBPaBLv82FgcyMQx8OrkOpANi01%2BjFTHgvtTqNqu4KniNqIsbIptHbZMc0ZR9vEklh6Fgr3UPKKV7vhuIFzqT8i0caLHNizcqQh%2FUMFdIz1G8%2FZzOfALa9jsuBkvvOoorGe0MgErgNd3oBbt57B%2F1TNzC2hdAve4xM5egibICEK7%2Bb0aTrCHZk8I3Mmb4fY5l7VDHHWcZGu2oNaf5YSNjv%2B%2FN5pxhsLhPwzCrtSP6ROoqvj%2BoF5GzOYB%2B0cn8oPwVanaax2JDCG%2FSeQhez6yAxrn%2BuzE45q3StTYqomBOGYIbIThzF4QnSHVpoV1R1mBYE6ECYTJs7ClItTgOX3pWTHGFtLlVv2Bxd4Dnkb5H%2BCwEzeil2ZQ1jSFGlExKQjY4eqaIDm%2BaQH0JsGcpGVnu%2BNDFOja5lQ45T0QSfVHTR5x32CQuJLnjQwvKR%2B2jBItNr1rHQJTvypp17vLlCjqymA1Ym1GMTTPJqTm6%2BY6vfLtnmYmdJ1VK%2FW%2BvUVYdiqqyzUZRl5mSrT6gWDwADt2m7g%2B9tg6D6L0cyRWhxy%2Bze6nQBzEBPSLhKYNoxC6H82S0abzbR4cRMFJV0cmBAeRefjHZj4KfdZUpcQm7rwL0eZmUPOS5ND%2FIxeeREQ9NcfH0qkhTwOSP1aaAzC0suqpBjqwAYzs5XLa4enCLihgwWGpgT4Fhy71p6UJiJ5T7KmpudMd48fk2q0fo37x93n%2B7hNfXn965BAPgjYoUw9kGMWBOewCWeYAIQolg6%2FZdQTsISdocD7nav%2BAIL%2BoH4Cvm5PseNwkOLbD767ShrhO2eJLCJfKjpFDN47JZB6eXNpy7VH5eem1W5qKeLrSbHYNzNmT0Qx0faB76VXRiwKn8ku%2B4s2uIti%2FB5gGw67221KrSpCf&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20231026T150000Z&X-Amz-SignedHeaders=host&X-Amz-Expires=21600&X-Amz-Credential=ASIAZH6WM4PL2AH7V2MG%2F20231026%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1069f4ce646ef4b5ca64fe7222a94fcb9859937463307af11429737c6ea957d6
+	// ALPHA ALPHANUMS
+	// ALPHA (lowercase letters) | NUM (0-9)
+	for (size_t i = 0; i < s.length(); ++i)
+	{
+		if (!isdigit(s[i]) && !islower(s[i]) && (s[i] != '_'))
+		{
+			return false;
+		}	
+	}
+	
+	// The last character cannot be a '_'
+	// ('_' | e) (alpha | num)
+	if (s.length() >= 15 && (s[14] == '_'))
+	{
+		return false;
+	}
+	
+	
+	// FIXME: Not fully implemented
+	return true;
+}
+
+
 // Found on page 2
 // Link: https://learn-us-east-1-prod-fleet02-xythos.content.blackboardcdn.com/5fb6991aeccdc/8415551?X-Blackboard-S3-Bucket=learn-us-east-1-prod-fleet01-xythos&X-Blackboard-Expiration=1698364800000&X-Blackboard-Signature=nAUd5XqCXhQY3xwXK0beddFQbVtNqnh8TBlRP7KrMTM%3D&X-Blackboard-Client-Id=100963&X-Blackboard-S3-Region=us-east-1&response-cache-control=private%2C%20max-age%3D21600&response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27SyntaxChart.pdf&response-content-type=application%2Fpdf&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFIaCXVzLWVhc3QtMSJHMEUCIFqgdAl4uU%2F1uUNq6QMNE0g4%2FVfGI0P51oU7y%2By5Uaa3AiEAyMW2W813CltCinm9Ox71WMAJ%2BwBBvPKTSifrPCHvKi4qtAUIexADGgw2MzU1Njc5MjQxODMiDAF6TpIF5%2FRnbExGHiqRBTXxXIFLqOEB4aFyb2onHIilmYFZVaSo93XoVPOCFMqlUJQRA6peFtI7AGVfpjV7NPY%2B%2FoZQUmfcGLJzB5Mju3fSCF55un%2BFw%2BHYlmc%2Bgl9g2DuQpD%2BwxJrHu70wz2WeQNNVbNx9lhzusrqOQbmfiDWGNljFrB3ITe%2FnscozbBLUVUnr%2F05F%2BRybX43YPwOSxrCxLJWgILu7nPEEAwS0zpedC9Ccr%2F2AQC94bOERL4pOPXL1h%2B3zXOlq0VlTdLNFl6iGZchS4f4QqL%2F6z77OzWR%2FKbTCYvEoxJ8z5qIRYM5Gwd8uvM1CNhQq1WAI31AVFr%2BJQW1QtHb%2BnTa0hTrVay8tz%2FWi7Z%2BxWYvUz5lWVAGYR0GCkqL0tJLx6w5UiZifqdwjSdzQe5MfwIi0yFdj61lhwj%2FAUmSej50gHTAR81d0vLtWvKWFxVk5ImSJ6vG%2FhDdrQbbpo3%2FA7VUQUTMQnkvOMyHHwm3mDCH1UGVTUfMx1dX%2FP1%2F4RH5lnIZ31bBFznnFFwe94%2FyG%2Bho3HJPLh9QeuW%2BTH3D0BTCjAjgyMLRCNB%2FSdBlfJAaKUVHbhKWRzuaXdaSZB6sjMbN5BsoZD1%2Bdl65yaqNj3UFe1Y0HjOXbxkTcSVxFwEDfWlf0xIbiHxSqfUXJIl%2FXskFQtVCLuo3MW8vWZjGH8%2FLOC2%2FqH5dkjTskZGR9TFuFMj1drUsCw415dbNVoNb%2BS%2B52KqTf9gWvaGtof9jzCezghyIXX8nxC3ohssa3%2B7CyHdyKd5Tvk%2BwJQOSQuO6E38iiuEkkYi59Ku4%2B5r00FciYCSsLN%2Fvmc%2B2borvnmMXOfu%2FOoerNUCvlaKJ8GbWXkaBXCIYu3M93HX0FLpUSOS46zZPvJwcF3jDMyOqpBjqxAdW%2BXgpz36Tq3BVoXYamIZEOIaKO9xY0wVBxM5EWF9doSsvEeA344u5GIFTr2mBNiNoxXBkIPxu031lfIj6HAU5Lneq2Dr9KcirTg8KFcxXLKaVrBbIdTkr%2Bn4u0tO2ef8ht9gizdO5xH12f2pt9DIrwdgmNOGQ5SD%2BUsdKu1LHR55%2B23QOrPheOdY0BP5K7rEqC9shTHBBU7%2BjQQu77QPY4CR4rAKD36uoRB2lZ30Ai%2BQ%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20231026T180000Z&X-Amz-SignedHeaders=host&X-Amz-Expires=21600&X-Amz-Credential=ASIAZH6WM4PL2GZD5TKV%2F20231026%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=eeffa7a4d06c6b1863ea5aafc25d57f5a496008b6121d1a9addade9737114de8
 bool isBoolean(string s)  // determines if s is a boolean
@@ -129,7 +162,5 @@ void Compiler::createListingHeader()
 	listingFile << "STAGE0:" << setw(2) << names << setw(6) << ctime(&now)<< endl; 
 	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
 }
-
-
 
 
