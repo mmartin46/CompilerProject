@@ -1,6 +1,7 @@
 // Cody Digby and Mitchell Martin
 // CS 4301
 // Stage 0
+#include <iomanip>
 #include <stage0.h>
 
 
@@ -20,4 +21,68 @@ Compiler::~Compiler()
 	sourceFile.close();
 	listingFile.close();
 	objectFile.close();
+}
+
+void Compiler::createListingHeader()
+{
+	// Time variable.
+	time_t now = time(NULL);
+	
+	string names = "CODY DIGBY, MITCHELL MARTIN";
+	
+	// The following needs to be sent to the listing file.";
+	listingFile << "STAGE0:" << setw(2) << names << setw(6) << ctime(&now)<< endl; 
+	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
+}
+
+
+// FIXME: Not Implemented
+void Compiler::parser()
+{	
+}
+
+// FIXME: Not Finished
+void Compiler::nextToken()
+{
+	token = "";
+	while (token == "")
+	{
+		if (ch == '{')
+		{
+			
+		}
+		else if (ch == '}')
+		{
+			
+		}
+		else if (isspace(ch))
+		{
+			nextChar();
+		}
+		else if (isSpecialSymbol(ch))
+		{
+			token = ch;
+			nextChar();
+		}
+	}
+	return token;
+}
+
+
+
+// FIXME: NOT FINISHED
+// Lexical Routines
+void Compiler::nextChar()
+{
+	// Reads the next character. 
+	sourceFile.get(ch);
+	
+	if (sourceFile.eof())
+	{
+		ch = END_OF_FILE;
+	}
+	else
+	{
+		
+	}
 }
