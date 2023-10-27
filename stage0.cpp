@@ -198,10 +198,12 @@ void Compiler::createListingHeader()
 	string names = "CODY DIGBY, MITCHELL MARTIN";
 	
 	// The following needs to be sent to the listing file.";
-	listingFile << "STAGE0:" << setw(2) << names << setw(6) << ctime(&now)<< endl; 
+	listingFile << "STAGE0:" << setw(3) << names << setw(6) << ctime(&now)<< endl; 
 	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
-	listingFile << "n";
+	listingFile << "\n";
 }
+
+
 
 
 
