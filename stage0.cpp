@@ -98,13 +98,14 @@ bool isNonKeyId(string s)
 			}
 		}
 		
+		// Checks if there is a space it has to be a '_')
 		if (!isdigit(s[i]) && !islower(s[i]) && (s[i] != '_'))
 		{
 			return false;
 		}	
 	}
 	
-	// The last character cannot be a '_'
+	// The last character cannot be a '_' or an empty string.
 	// ('_' | e) (alpha | num)
 	if (sLength >= 15 && (s[sLength - 1] == '_'))
 	{
