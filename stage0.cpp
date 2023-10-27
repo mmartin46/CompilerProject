@@ -13,10 +13,8 @@ void Compiler::processError(string err)
 {
 	listingFile << "processError(): Line #" << lineNo << ": " << err << endl;
 	++errorCount;
-	listingFile << "\nerrorCount: " << errorCount << endl;
-	listingFile << "COMPILATION TERMINATED" << endl;
-	exit(1);
 }
+
 
 
 /* HELPER FUNCTIONS */
@@ -208,6 +206,16 @@ void Compiler::createListingHeader()
 	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
 	listingFile << "\n";
 }
+
+void Compiler::createListingTrailer()
+{
+	listingFile << "COMPILATION TERMINATED, ";
+	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
+	exit(1);	
+}
+
+
+
 
 
 
