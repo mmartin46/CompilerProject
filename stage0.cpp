@@ -134,6 +134,7 @@ bool isInteger(string s)   // determines if s is an integer
 	}
 	catch (const invalid_argument &e) 
 	{
+		// The exception is caught just return false.
 		return false;
 	}
 	return true;
