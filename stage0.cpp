@@ -11,9 +11,9 @@
 /* OTHER ROUTINES */
 void Compiler::processError(string err)
 {
-	listingFile << "Error: Line #" << lineNo << ": " << err << endl;
+	listingFile << "processError(): Line #" << lineNo << ": " << err << endl;
 	++errorCount;
-	listingFile << "\nError Count: " << errorCount << endl;
+	listingFile << "\nerrorCount: " << errorCount << endl;
 	listingFile << "Compilation Terminated" << endl;
 	exit(1);
 }
@@ -202,6 +202,8 @@ void Compiler::createListingHeader()
 	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
 	listingFile << "n";
 }
+
+
 
 
 
