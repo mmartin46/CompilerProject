@@ -18,6 +18,7 @@ void Compiler::processError(string err)
 	exit(1);
 }
 
+
 /* HELPER FUNCTIONS */
 // ---------- Found on page 1 ---------------- //
 // Link: https://learn-us-east-1-prod-fleet02-xythos.content.blackboardcdn.com/5fb6991aeccdc/8415552?X-Blackboard-S3-Bucket=learn-us-east-1-prod-fleet01-xythos&X-Blackboard-Expiration=1698364800000&X-Blackboard-Signature=RGxTUQ6Q%2Bu6G3dQUIF9uosjfgmT6ghjTIQ8%2Fojc8eKg%3D&X-Blackboard-Client-Id=100963&X-Blackboard-S3-Region=us-east-1&response-cache-control=private%2C%20max-age%3D21600&response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27LanguageDefinitionAndGrammar.pdf&response-content-type=application%2Fpdf&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFQaCXVzLWVhc3QtMSJGMEQCIF3NK48ts%2FeM9TMQxIyZyBFx4C%2Fv7HhGdlP%2F8M3VtadzAiAwjER2DH49ER5zMq15sTkRLJNS7ariJibbLuxBZtLXriq0BQh9EAMaDDYzNTU2NzkyNDE4MyIMBkyW5Yd7EkMMmfplKpEFB6%2Bzi%2FrAQmrRJQpRuNhKA0SumZm%2BvS8IfpqetIALwPNcKqvgPdpW%2FNpQw%2F1b8vfREH%2FDuVFVPn7sID5UJYNCjy%2BnOVtOo33N55%2FJ6%2Bgqx6yo2i7RIz1Wmw8lYkPnH%2B%2BAvIdjErzXQeXuEy1e2cAM%2BdetAHe6XLAccgBTupBgE49gWPc6JGYmR3P1CAX%2FwidBgCa9hyvEG%2FLV9SFWJQeMV16c7gte37TKsu36Ry5jrAMPTfIdbxv5zxqS%2FH6wZntvfeHiS43E%2F1Q%2BFF7pfAKoCVz2ggD7kjijFXvAbvvn%2FawPMA%2Bhl0%2B2%2B%2FuyMhdHS%2Bfzm%2BjADoXzYo68gmhx67QWFLRMazUPpL8zg%2BJ30wkphq2o3w5cmTWk%2B4T%2Bfk9PD5Ujp2joqu7uimu4F3E3TNU5EPisqLBEWtqSbsM5GdVRPKIk4rqHOF0J4%2BO9pFGFUCwblm6p9zYaQZDiMox%2BsqcewKDmTZhjUKXLs6ydBVudH50IvBtyq1ShWKCZ8%2F4F9a4YScnC7u%2FcPyB1woTErpOYyKK37uQH1ORk55sLzP4k1urHTTpDLOrYB7f6c0JglBHdpPbAvnJqHcp4iwCT4faqEL%2BbJ%2FeTP%2BxOx%2FF8XEoYXkcXXvr%2FHzXYD%2FuBOb8zPmZoWqEKZ%2B%2BdzoFMiJwZzTZpo5sMSZRtpC1d%2BtzJ5yf6iCoHXBHBlxedltPPoNnkoGw5XQvbd5gBtQO2vQkMj0YZ7BONo7LfhZp92gfGj9AcENzOXbmeOBdj%2FIQZsr9t7iwuEdNGo%2BK3FNrESkh%2FQI3ORRTKzMCtgRbJSef%2FAF9YgLPETIVMRjBuepVw6jMFo4oOCxt6dGALxu%2Bgvobk8P9%2ByILDwr%2FtLhPSQA%2FTBiALLxCOMO%2BA66kGOrIBullz4kuGAl0u4%2Fha%2F7MfFYMIHT8zsjY%2FOi4JcO7f%2F033dPw9pn75lhKpgW8ZyhpsEBAUZd3VA6BrLouZQ1dsI0xiA4rOE3fmh8mUihFxH4wst63jtjrUXJb5731yLaeza0z1Zyl0nztqRwSJclBUuOo7Vr%2B2kALIxY7WnWgx03FJXR2uG5Absw1NXQts0HK4MVguqlqpgEVtMDl2Qzp7GUF5rhIHUFdNPIJtKeR3C%2FAEsw%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20231026T180000Z&X-Amz-SignedHeaders=host&X-Amz-Expires=21600&X-Amz-Credential=ASIAZH6WM4PLXR24LND3%2F20231026%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1673ba84c2fd9e47e6160f2f3911f670f08cbb0198278e7859739f4129cd9eed
@@ -64,6 +65,7 @@ bool isSpecialSymbol(char c)
 
 bool isNonKeyId(string s)
 {
+	size_t sLength = s.length();
 	// Check if it's a keyword obviously.
 	if (isKeyword(s))
 	{
@@ -77,7 +79,7 @@ bool isNonKeyId(string s)
 	
 	// Only one underscore is syntatically correct.
 	int underscoreCount = 0;
-	for (size_t i = 0; i < s.length(); ++i)
+	for (size_t i = 0; i < sLength; ++i)
 	{
 		if (isSpecialSymbol(s[i]))
 		{
@@ -104,12 +106,11 @@ bool isNonKeyId(string s)
 	
 	// The last character cannot be a '_'
 	// ('_' | e) (alpha | num)
-	if (s.length() >= 15 && (s[14] == '_'))
+	if (sLength >= 15 && (s[sLength - 1] == '_'))
 	{
 		return false;
 	}
 		
-	// FIXME: Not fully implemented
 	return true;
 }
 
@@ -188,3 +189,5 @@ void Compiler::createListingHeader()
 	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
 	listingFile << "n";
 }
+
+
