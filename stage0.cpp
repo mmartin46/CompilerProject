@@ -13,6 +13,7 @@ void Compiler::processError(string err)
 {
 	listingFile << "processError(): Line #" << lineNo << ": " << err << endl;
 	++errorCount;
+	exit(1);	
 }
 
 
@@ -211,10 +212,7 @@ void Compiler::createListingTrailer()
 {
 	listingFile << "COMPILATION TERMINATED, ";
 	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
-	exit(1);	
 }
-
-
 
 
 
