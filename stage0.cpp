@@ -182,9 +182,9 @@ bool Compiler::isLiteral(string s) const// determines if s is a literal
 Compiler::Compiler(char **argv)
 {
 
-	sourceFile.open(argv[0]);
-	listingFile.open(argv[1]);
-	objectFile.open(argv[2]);
+	sourceFile.open(argv[1]);
+	listingFile.open(argv[2]);
+	objectFile.open(argv[3]);
 }
 
 Compiler::~Compiler()
