@@ -13,6 +13,7 @@ void Compiler::processError(string err)
 {
 	listingFile << "processError(): Line #" << lineNo << ": " << err << endl;
 	++errorCount;
+	createListingTrailer();
 	exit(1);	
 }
 
