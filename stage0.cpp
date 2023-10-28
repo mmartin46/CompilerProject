@@ -205,7 +205,7 @@ void Compiler::createListingHeader()
 	
 	// The following needs to be sent to the listing file.";
 	listingFile << "STAGE0:" << setw(3) << names << setw(6) << ctime(&now)<< endl; 
-	listingFile << "LINE NO:" << setw(9) << "SOURCE STATEMENT" << "\r\n";
+	listingFile << "LINE NO:" << setw(3) << setw(23) << "SOURCE STATEMENT" << "\r\n";
 	listingFile << "\n";
 }
 
@@ -215,7 +215,15 @@ void Compiler::createListingTrailer()
 	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
 }
 
-
+// FIXME: Unfinished
+char Compiler::nextChar()
+{
+	// Gets the next character and stores it in ch.
+	sourceFile.get(ch);
+	
+	// FIXME: Change this
+	return '0';
+}
 
 
 
