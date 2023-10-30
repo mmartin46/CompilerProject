@@ -163,7 +163,7 @@ bool Compiler::isLiteral(string s) const// determines if s is a literal
 	// Check if the literal contains "not "
 	if (s.substr(0, 4) == "not ")
 	{
-		if (isBoolean(s))
+		if (isBoolean(s.substr(4, -1)))
 		{
 			return true;
 		}
@@ -181,6 +181,7 @@ bool Compiler::isLiteral(string s) const// determines if s is a literal
 	}
 	return false;
 }
+
 
 
 /* COMPILER FUNCTIONS */
@@ -230,6 +231,5 @@ char Compiler::nextChar()
 	// FIXME: Change this
 	return '0';
 }
-
 
 
