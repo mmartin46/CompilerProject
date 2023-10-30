@@ -104,7 +104,7 @@ bool Compiler::isNonKeyId(string s) const
 			}
 		}
 		// All lowercase
-		if (!islower(s[i]))
+		if (isalpha(s[i]) && !islower(s[i]))
 		{
 		    return false;
 		}
@@ -112,7 +112,7 @@ bool Compiler::isNonKeyId(string s) const
 	
 	// The last character cannot be a '_' or an empty string.
 	// ('_' | e) (alpha | num)
-	if (sLength >= 15 && (s[sLength - 1] == '_'))
+	if (s[sLength - 1] == '_')
 	{
 		return false;
 	}
