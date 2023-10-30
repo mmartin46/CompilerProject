@@ -77,6 +77,12 @@ bool Compiler::isNonKeyId(string s) const
 	// ALPHA ALPHANUMS
 	// ALPHA (lowercase letters) | NUM (0-9)
 	
+	// Must start with an ALPHA.
+	if (!isalpha(s[0]) || s[0] == '_')
+	{
+		return false;
+	}
+	
 	// Only one underscore is syntatically correct.
 	int underscoreCount = 0;
 	for (size_t i = 0; i < sLength; ++i)
