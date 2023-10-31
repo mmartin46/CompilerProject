@@ -93,7 +93,7 @@ bool Compiler::isNonKeyId(string s) const
 		return false;
 	}
 	
-	
+	int underscoreCount = 0;
 	for (size_t i = 1; i < sLength; ++i)
 	{
 		if (isSpecialSymbol(s[i]))
@@ -107,6 +107,16 @@ bool Compiler::isNonKeyId(string s) const
 		if (isalpha(s[i]) && !islower(s[i]))
 		{
 		    return false;
+		}
+		
+		if (s[i] == '_') 
+		{
+			// Only one underscore is allowed.
+			++underscoreCount;
+			if (underscoreCount > 1)
+			{
+				return false;
+			}
 		}
 	}
 	
@@ -229,4 +239,3 @@ char Compiler::nextChar()
 	// FIXME: Change this
 	return '0';
 }
-
