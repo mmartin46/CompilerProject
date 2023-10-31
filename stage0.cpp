@@ -230,11 +230,17 @@ void Compiler::createListingTrailer()
 	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
 }
 
-// FIXME: Unfinished
+// FIXME: Unfinished (DON'T USE)
 char Compiler::nextChar()
 {
 	// Gets the next character and stores it in ch.
 	sourceFile.get(ch);
+	
+	// If the end of the file has been reached.
+	if (sourceFile.eof())
+	{
+		ch = END_OF_FILE;
+	}
 	
 	// FIXME: Change this
 	return '0';
