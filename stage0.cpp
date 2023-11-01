@@ -168,14 +168,16 @@ bool Compiler::isLiteral(string s) const// determines if s is a literal
 	{
 		return true;
 	}
+	
 	// Check if the literal contains "not "
-	if (s.substr(0, 4) == "not ")
-	{
-		if (isBoolean(s.substr(4, -1)))
-		{
-			return true;
-		}
-	}
+	//if (s.substr(0, 4) == "not ")
+	//{
+	//	if (isBoolean(s.substr(4, -1)))
+	//	{
+	//		return true;
+	//	}
+	//}
+	
 	if (s.front() == '+' || s.front() == '-')
 	{
 		if (isInteger(s))
@@ -240,6 +242,10 @@ char Compiler::nextChar()
 	if (sourceFile.eof())
 	{
 		ch = END_OF_FILE;
+	}
+	else
+	{
+		
 	}
 	
 	// FIXME: Change this
