@@ -595,3 +595,140 @@ char Compiler::nextChar()
 	prevCh = ch;
 	return ch;
 }
+
+
+
+
+
+
+// FIXME:: 
+/* GRAMMAR RULES */
+
+void Compiler::constStmts() //token should be NON_KEY_ID
+{
+	string x, y;
+  if (isNonKeyId(token))
+  {
+  	processError("non-keyword identifier expected");
+  }
+  x = token;
+  if (nextToken() != "=")
+  {
+  	processError("\"=\" expected");
+  }
+  y = nextToken();
+  
+  if ( (y != "+") && (y != "-") && (y != "not") && (!isNonKeyId(y)) && !(isBoolean(y)) && !(isInteger(y)))
+  {
+  	processError("token to the right of \"=\" illegal");
+  }
+  if ((y == "+") || (y == "-"))
+  {
+    if (whichType(nextToken()) != INTEGER)
+    {
+    	processError("integer expected after sign");
+    }
+    y += token;
+  }
+  if (y == "not")
+  {
+  	if (whichType(nextToken()) != BOOLEAN)
+    {
+    	processError("boolean expected after \"not\"");
+    }
+    if (token == "true")
+    {
+    	y = "false";
+    }
+    else
+    {
+    	y = "true";
+    }
+  }
+  
+  if (nextToken() != ";")
+  {
+  	processError("semicolon expected");
+  }
+  // FIXME: Not finished
+}
+
+void Compiler::varStmts() //token should be NON_KEY_ID
+{ /*
+   if (token is not a NON_KEY_ID)
+   processError(non-keyword identifier expected)
+   x = ids()
+   if (token != ":")
+   processError(":" expected)
+   if (nextToken() is not one of "integer","boolean")
+   processError(illegal type follows ":")
+  y = token
+   if (nextToken() != ";")
+   processError(semicolon expected)
+   insert(x,y,VARIABLE,"",YES,1)
+   if (nextToken() is not one of "begin",NON_KEY_ID)
+   processError(non-keyword identifier or "begin" expected)
+   if (token is a NON_KEY_ID)
+   varStmts()
+   */
+   
+  string x, y;
+
+	if (!isNonKeyId(nextToken()))
+  {
+			processError("non-keyword identifier expected");
+	}
+
+	x = ids();
+
+	if (token != ":")
+  {
+			processError(": expected");
+	}
+    
+	if (isInteger(nextToken()) == false && isBoolean(nextToken()) == false)
+  {
+			processError("illegal type follows :");
+	}
+
+	y = token;
+
+	if (nextToken() != ";")
+  {
+			processError("semicolon expected");
+	}
+
+	insert(x, whichType(y), VARIABLE, "", YES, 1);
+  
+	if (nextToken() != "begin" && !isNonKeyId(nextToken()))
+  {
+			processError("non-keyword identifier or begin expected");
+	}
+  
+	if (isNonKeyId(token))
+  {
+			varStmts();
+	}
+}
+
+
+string Compiler::ids() //token should be NON_KEY_ID
+{
+   string temp, tempString;
+   if (!isNonKeyId(token))
+   {
+   		processError("non-keyword identifier expected");
+   }
+   tempString = token;
+   temp = token;
+   if (nextToken() == ",")
+   {
+   		if (!isNonKeyId(nextToken()))
+      {
+      		processError("non-keyword identifier expected");
+      }
+      tempString = temp + "," + ids();
+   }
+   return tempString;
+}
+// ::
