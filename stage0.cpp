@@ -313,12 +313,36 @@ void Compiler::emitPrologue(string progName, string operand2)
 */
 }
 
+// FIXME:
+void Compiler::emitEpilogue(string operand1, string operand2)
+{
+	emit("","Exit", "{0}");
+	emitStorage();
+}
+
 void Compiler::emitStorage()
 {
 	emit("SECTION", ".data");
-	// FIXME: Not finished
+  map<string, SymbolTableEntry>::iterator iter = symbolTable.begin();
+  for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
+  {
+  	if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == CONSTANT))
+    {
+    	emit(iter->second.getInternalName(), "dd", iter->second.getValue(), "; " + iter->first);
+    }
+  }
+  
+  objectFile << "\n";
+  emit("SECTION", ".bss");
+  for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
+  {
+  	if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == VARIABLE))
+    {
+    	emit(iter->second.getInternalName(), "resd", iter->second.getValue(), "; " + iter->first);
+    }
+  }
+  
 }
-
 
 void Compiler::insert(string externalName, storeTypes inType, modes inMode,
               string inValue, allocation inAlloc, int inUnits)
@@ -342,7 +366,6 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 		}
 		
 		// Already defined.
-		// FIXME: Not completely implemented.
 		if (name.size() != 0)
 		{
 			if (symbolTable.count(name) > 0)
@@ -355,7 +378,6 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 			}
 			else
 			{
-				// FIXME: NOT FINISHED
 				if (isupper(name[0]))
 				{
 					// Take only the 15 characters.
@@ -376,3 +398,127 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 
 
 
+
+
+
+
+
+
+
+
+/* LEXICAL FUNCTIONS */
+
+
+// Basically implementing the psuedocode.
+string Compiler::nextToken()
+{
+	token = "";
+	while (token == "")
+	{
+		if (ch == '{')
+		{
+			while ((nextChar() != END_OF_FILE) &&
+					(ch != '}'))
+			{
+				// Empty one
+			}
+			
+			if (ch == END_OF_FILE)
+			{
+				processError("unexpected end of file");
+			}
+			else
+			{
+				nextChar();
+			}
+		}
+		else if (ch == '}')
+		{
+			processError("'}' cannot begin token");
+		}
+		else if (isspace(ch))
+		{
+			nextChar();
+		}
+		else if (isSpecialSymbol(ch))
+		{
+			token = ch;
+			nextChar();
+		}
+		else if (islower(ch))
+		{
+			token = ch;
+			while ((isalpha(nextChar()) ||
+				   isdigit(ch) ||
+				   (ch == '_')) &&
+				   (ch != END_OF_FILE))
+			{
+				token += ch;
+			}
+			
+			if (ch == END_OF_FILE)
+			{
+				processError("unexpected end of file");
+			}
+		}
+		else if (isdigit(ch))
+		{
+			token = ch;
+			while (isdigit(nextChar()) && (ch != END_OF_FILE))
+			{
+				token += ch;
+			}
+			if (ch == END_OF_FILE)
+			{
+				processError("unexpected end of file");
+			}
+		}
+		else if (ch == END_OF_FILE)
+		{
+			token = ch;
+		}
+		else
+		{
+			processError("illegal symbol");
+		}
+	}
+	
+	// Get the first 15 characters.
+	token = token.substr(0, 15);
+	
+	return token;
+}
+
+char Compiler::nextChar()
+{
+	// Gets the next character and stores it in ch.
+	static char prevCh = '\n';
+	sourceFile.get(ch);
+	
+	// If the end of the file has been reached.
+	if (sourceFile.eof())
+	{
+		ch = END_OF_FILE;
+	}
+	
+	// If the ch isn't at the end of file.
+	if (ch != END_OF_FILE)
+	{
+		if (prevCh == '\n')
+		{
+			lineNo++;
+			// Insert line number in the listing gile.
+			listingFile << setw(5) << right << lineNo << "|";
+		}
+		// Put the ch inside the listing file.
+		listingFile << ch;	
+	}
+	else
+	{
+		// Keeps the bottom line.
+		listingFile << endl;
+	}
+	
+	prevCh = ch;
+	return ch;
+}
