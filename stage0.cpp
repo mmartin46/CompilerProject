@@ -238,6 +238,16 @@ void Compiler::createListingTrailer()
 	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
 }
 
+
+
+
+
+
+
+
+
+/* ASSEMBLY FUNCTIONS */
+
 void Compiler::emit(string label, string instruction, string operands,
             string comment)
 {
@@ -269,8 +279,26 @@ void Compiler::emitPrologue(string progName, string operand2)
 
 void Compiler::emitStorage()
 {
-
+	emit("SECTION", ".data");
+	// FIXME: Not finished
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* LEXICAL FUNCTIONS */
+
 
 // Basically implementing the psuedocode.
 string Compiler::nextToken()
