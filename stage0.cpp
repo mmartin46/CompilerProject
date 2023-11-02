@@ -360,13 +360,13 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 				{
 					// Take only the 15 characters.
 					string limitName = name.substr(0, 15);
-          symbolTable.insert( { limitName, SymbolTableEntry(limitName, inType, inMode, inValue, inAlloc, inUnits)} );
+					symbolTable.insert( { limitName, SymbolTableEntry(limitName, inType, inMode, inValue, inAlloc, inUnits)} );
 				}
 				else
 				{
 					// Take only the 15 characters.
 					string limitName = name.substr(0, 15);
-          symbolTable.insert( { limitName, SymbolTableEntry(genInternalName(inType), inType, inMode, inValue, inAlloc, inUnits)} );        
+					symbolTable.insert( { limitName, SymbolTableEntry(genInternalName(inType), inType, inMode, inValue, inAlloc, inUnits)} );        
 				}
 			}
 		}
