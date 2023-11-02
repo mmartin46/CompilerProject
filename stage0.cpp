@@ -296,6 +296,38 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
               string inValue, allocation inAlloc, int inUnits)
 {
 	string name;
+	
+	string::iterator str_itr = externalName.begin();
+	
+	while (str_itr < externalName.end())
+	{
+		// GRABBING EACH NAME.
+		name = "";
+		
+		// The CONTENTS of the ITERATOR
+		// *str_itr - contents (the actual variable)
+		// str_itr - iterator itself
+		while ((*str_itr != ',') && (str_itr < externalName.end()))
+		{
+			name += *str_itr;
+			++str_itr;	// Incrementing the iterator, not the contents.
+		}
+		
+		// Already defined.
+		// FIXME: Not completely implemented.
+		if (name.size() != 0)
+		{
+			if (symbolTable.count(name) > 0)
+			{
+				processError("multiple name definition");
+			}
+			else if (isKeyword(name))
+			{
+				processError("name is a keyword");
+			}
+		}
+			
+	}
 }
 
 
