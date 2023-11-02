@@ -238,6 +238,40 @@ void Compiler::createListingTrailer()
 	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
 }
 
+void Compiler::emit(string label, string instruction, string operands,
+            string comment)
+{
+	// Sets how the content is position,
+	// written in the psuedocode.
+	objectFile << left << setw(8) << label;
+	objectFile << left << setw(8) << instruction;
+	objectFile << left << setw(24) << operands;
+	objectFile << left << comment << endl;
+}
+
+void Compiler::emitPrologue(string progName, string operand2)
+{
+	time_t currTime;
+	string names = "CODY DIGBY, MITCHELL MARTIN";
+	string along1 = "%INCLUDE \"Along32.inc\"";
+	string along2 = "%INCLUDE \"Macros_Along.inc\"";
+	
+	// Writes the names, includes, and time to the object file.
+	objectFile << "; " << names << ctime(&currTime);
+	objectFile << along1 << endl;
+	objectFile << along2 << endl << endl;
+	
+	emit("SECTION", ".text");
+	emit("global", "_start");
+	objectFile << endl;
+	emit("_start:");
+}
+
+void Compiler::emitStorage()
+{
+
+}
+
 // Basically implementing the psuedocode.
 string Compiler::nextToken()
 {
