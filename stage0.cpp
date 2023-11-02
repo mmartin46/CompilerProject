@@ -276,13 +276,10 @@ void Compiler::createListingTrailer()
 
 /* ASSEMBLY FUNCTIONS */
 
-// FIX ME ::
 storeTypes Compiler::whichType(string name) //tells which data type a name has
 {
-	
   storeTypes dataType;
   map<string, SymbolTableEntry>::iterator iter = symbolTable.find(name);
-  
   
 	if (isLiteral(name))
   {
@@ -310,6 +307,7 @@ storeTypes Compiler::whichType(string name) //tells which data type a name has
   return dataType;
 }
 
+
 string Compiler::whichValue(string name) //tells which value a name has
 {
 	string value;
@@ -334,6 +332,7 @@ string Compiler::whichValue(string name) //tells which value a name has
 	return value;
 }
 
+
 void Compiler::code(string op, string operand1, string operand2)
 {
  	if (op == "program")
@@ -349,7 +348,7 @@ void Compiler::code(string op, string operand1, string operand2)
   	processError("compiler error since function code should not be called with illegal arguments");
   }
 }
-// ::
+
 
 void Compiler::emit(string label, string instruction, string operands,
             string comment)
