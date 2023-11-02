@@ -276,6 +276,81 @@ void Compiler::createListingTrailer()
 
 /* ASSEMBLY FUNCTIONS */
 
+// FIX ME ::
+storeTypes Compiler::whichType(string name) //tells which data type a name has
+{
+	
+  storeTypes dataType;
+  map<string, SymbolTableEntry>::iterator iter = symbolTable.find(name);
+  
+  
+	if (isLiteral(name))
+  {
+  	if (isBoolean(name))
+    {
+    	dataType = BOOLEAN;
+    }
+    else
+    {
+    	dataType = INTEGER;
+    }
+  }
+  else
+  {
+  	// if symbolTable[name] is defined 
+  	if (symbolTable.count(name) > 0)
+    {
+    	dataType = iter->second.getDataType();
+    }
+    else
+    {
+    	processError("reference to undefined constant");
+    }
+  }
+  return dataType;
+}
+
+string Compiler::whichValue(string name) //tells which value a name has
+{
+	string value;
+	map<string, SymbolTableEntry>::iterator iter = symbolTable.find(name);
+  
+	if (isLiteral(name))
+	{
+		value = name;
+	}
+  	else 
+  	{
+  		// IS DEFINED AND HAS A VALUE
+  		if ((symbolTable.count(name) > 0) && (iter->second.getValue() != ""))
+    	{
+    		value = iter->second.getValue();
+		}
+    	else
+    	{
+    		processError("reference to undefined constant");
+    	}
+  	}
+	return value;
+}
+
+void Compiler::code(string op, string operand1, string operand2)
+{
+ 	if (op == "program")
+  {
+  	emitPrologue(operand1);
+  }
+  else if (op == "end")
+  {
+  	emitEpilogue();
+  }
+  else
+  {
+  	processError("compiler error since function code should not be called with illegal arguments");
+  }
+}
+// ::
+
 void Compiler::emit(string label, string instruction, string operands,
             string comment)
 {
@@ -313,7 +388,6 @@ void Compiler::emitPrologue(string progName, string operand2)
 */
 }
 
-// FIXME:
 void Compiler::emitEpilogue(string operand1, string operand2)
 {
 	emit("","Exit", "{0}");
