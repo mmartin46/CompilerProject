@@ -13,6 +13,12 @@ void Compiler::processError(string err)
 {
 	listingFile << "processError(): Line #" << lineNo << ": " << err << endl;
 	++errorCount;
+	// Error count needs to be a zero or a one.
+	if (errorCount > 0)
+	{
+		createListingTrailer();
+		exit(1);			
+	}
 	createListingTrailer();
 	exit(1);	
 }
@@ -232,10 +238,10 @@ void Compiler::createListingTrailer()
 	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
 }
 
-// FIXME: Unfinished (DON'T USE)
 char Compiler::nextChar()
 {
 	// Gets the next character and stores it in ch.
+	static char prevCh = '\n';
 	sourceFile.get(ch);
 	
 	// If the end of the file has been reached.
@@ -243,11 +249,26 @@ char Compiler::nextChar()
 	{
 		ch = END_OF_FILE;
 	}
+	
+	// If the ch isn't at the end of file.
+	if (ch != END_OF_FILE)
+	{
+		if (prevCh == '\n')
+		{
+			lineNo++;
+			// Insert line number in the listing gile.
+			listingFile << setw(5) << right << lineNo << "|";
+		}
+		// Put the ch inside the listing file.
+		listingFile << ch;	
+	}
 	else
 	{
-		
+		// Keeps the bottom line.
+		listingFile << endl;
 	}
 	
+	prevCh = ch;
 	// FIXME: Change this
-	return '0';
+	return ch;
 }
