@@ -364,7 +364,9 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 				}
 				else
 				{
-        
+					// Take only the 15 characters.
+					string limitName = name.substr(0, 15);
+          symbolTable.insert( { limitName, SymbolTableEntry(genInternalName(inType), inType, inMode, inValue, inAlloc, inUnits)} );        
 				}
 			}
 		}
@@ -496,5 +498,6 @@ char Compiler::nextChar()
 	}
 	
 	prevCh = ch;
+	// FIXME: Change this
 	return ch;
 }
