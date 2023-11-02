@@ -238,6 +238,86 @@ void Compiler::createListingTrailer()
 	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
 }
 
+// Basically implementing the psuedocode.
+string Compiler::nextToken()
+{
+	token = "";
+	while (token == "")
+	{
+		if (ch == '{')
+		{
+			while ((nextChar() != END_OF_FILE) &&
+					(ch != '}'))
+			{
+				// Empty one
+			}
+			
+			if (ch == END_OF_FILE)
+			{
+				processError("unexpected end of file");
+			}
+			else
+			{
+				nextChar();
+			}
+		}
+		else if (ch == '}')
+		{
+			processError("'}' cannot begin token");
+		}
+		else if (isspace(ch))
+		{
+			nextChar();
+		}
+		else if (isSpecialSymbol(ch))
+		{
+			token = ch;
+			nextChar();
+		}
+		else if (islower(ch))
+		{
+			token = ch;
+			while ((isalpha(nextChar()) ||
+				   isdigit(ch) ||
+				   (ch == '_')) &&
+				   (ch != END_OF_FILE))
+			{
+				token += ch;
+			}
+			
+			if (ch == END_OF_FILE)
+			{
+				processError("unexpected end of file");
+			}
+		}
+		else if (isdigit(ch))
+		{
+			token = ch;
+			while (isdigit(nextChar()) && (ch != END_OF_FILE))
+			{
+				token += ch;
+			}
+			if (ch == END_OF_FILE)
+			{
+				processError("unexpected end of file");
+			}
+		}
+		else if (ch == END_OF_FILE)
+		{
+			token = ch;
+		}
+		else
+		{
+			processError("illegal symbol");
+		}
+	}
+	
+	// Get the first 15 characters.
+	token = token.substr(0, 15);
+	
+	return token;
+}
+
 char Compiler::nextChar()
 {
 	// Gets the next character and stores it in ch.
