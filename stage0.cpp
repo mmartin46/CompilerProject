@@ -272,9 +272,17 @@ void Compiler::emitPrologue(string progName, string operand2)
 	objectFile << along2 << endl << endl;
 	
 	emit("SECTION", ".text");
-	emit("global", "_start");
+	emit("global", "_start", "; program " + progName);
 	objectFile << endl;
 	emit("_start:");
+	
+/*
+	; CODY DIGBY, MITCHELL MARTIN 		Mon Oct 19 17:19:53 2020
+	%INCLUDE "Along32.inc"
+	%INCLUDE "Macros_Along.inc"
+	SECTION .text
+	global _start ; program stage0no001
+*/
 }
 
 void Compiler::emitStorage()
@@ -284,8 +292,11 @@ void Compiler::emitStorage()
 }
 
 
-
-
+void Compiler::insert(string externalName, storeTypes inType, modes inMode,
+              string inValue, allocation inAlloc, int inUnits)
+{
+	string name;
+}
 
 
 
