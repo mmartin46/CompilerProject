@@ -623,6 +623,41 @@ char Compiler::nextChar()
 // FIXME:: 
 /* GRAMMAR RULES */
 
+
+// Basically the psuedocode
+void Compiler::vars()
+{
+	if (token != "var")
+	{
+		processError("keyword \"var\" expected");
+	}
+	if (!isNonKeyId(nextToken()))
+	{
+		processError("non-keyword identifier must follow \"var\"");
+	}
+	varStmts();
+}
+
+// Basically the psuedocode.
+void Compiler::beginEndStmt()
+{
+	if (token != "begin")
+	{
+		processError("keyword \"begin\" expected");
+	}
+	if (nextToken() != "end")
+	{
+		processError("keyword \"end\" expected");
+	}
+	if (nextToken() != ".")
+	{
+		processError("period expected");
+	}
+	nextToken();
+	code("end", ".");
+}
+
+
 void Compiler::constStmts() //token should be NON_KEY_ID
 {
   string x, y;
