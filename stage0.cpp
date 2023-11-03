@@ -385,7 +385,7 @@ void Compiler::emitPrologue(string progName, string operand2)
 	
 	// Writes the names, includes, and time to the object file.
 	objectFile << "; " << names;
-	objectFile << left << setw(7) << ctime(&currTime);
+	objectFile << "       " << ctime(&currTime);
 	objectFile << along1 << endl;
 	objectFile << along2 << endl << endl;
 	
