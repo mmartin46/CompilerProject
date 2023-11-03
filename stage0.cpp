@@ -623,6 +623,32 @@ char Compiler::nextChar()
 // FIXME:: 
 /* GRAMMAR RULES */
 
+void Compiler::prog()
+{
+	if (token != "program")
+	{
+		processError("keyword \"program\" expected");
+	}
+	progStmt();
+	if (token == "const")
+	{
+		consts();
+	}
+	if (token == "var")
+	{
+		vars();
+	}
+	if (token != "begin")
+	{
+		processError("keyword \"begin\" expected");
+	}
+	beginEndStmt();
+	if (token != "$")
+	{
+		processError("no text may follow \"end\"");
+	}
+}
+
 void Compiler::progStmt()
 {
 	string x;
