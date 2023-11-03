@@ -732,7 +732,7 @@ void Compiler::beginEndStmt()
 void Compiler::constStmts() //token should be NON_KEY_ID
 {
   string x, y;
-  if (isNonKeyId(token))
+  if (!isNonKeyId(token))
   {
   	processError("non-keyword identifier expected");
   }
