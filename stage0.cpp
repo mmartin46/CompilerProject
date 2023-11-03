@@ -270,7 +270,7 @@ void Compiler::createListingHeader()
 	
 	// The following needs to be sent to the listing file.";
 	listingFile << "STAGE0:" << "  " << names << "      " << ctime(&now)<< endl; 
-	listingFile << "LINE NO:" << "                    " << "SOURCE STATEMENT" << "\r\n";
+	listingFile << "LINE NO." << "              " << "SOURCE STATEMENT" << "\n";
 	listingFile << "\n";
 }
 
@@ -406,6 +406,7 @@ void Compiler::emitPrologue(string progName, string operand2)
 void Compiler::emitEpilogue(string operand1, string operand2)
 {
 	emit("","Exit", "{0}");
+	objectFile << "\n";
 	emitStorage();
 }
 
