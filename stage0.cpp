@@ -395,7 +395,7 @@ void Compiler::emitEpilogue(string operand1, string operand2)
 
 void Compiler::emitStorage()
 {
-	emit("SECTION", ".data");
+  emit("SECTION", ".data");
   map<string, SymbolTableEntry>::iterator iter = symbolTable.begin();
   for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
   {
@@ -444,6 +444,8 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 		// The CONTENTS of the ITERATOR
 		// *str_itr - contents (the actual variable)
 		// str_itr - iterator itself
+		
+		// 
 		while ((*str_itr != ',') && (str_itr < externalName.end()))
 		{
 			name += *str_itr;
@@ -477,7 +479,12 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 				}
 			}
 		}
-			
+		
+		// The symbol table will hold up to 256 entries.
+		if (symbolTable.size() > 256)
+		{
+			processError("cannot hold over 256 entries");
+		}
 	}
 }
 
