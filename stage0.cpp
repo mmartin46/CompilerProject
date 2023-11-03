@@ -812,34 +812,36 @@ void Compiler::varStmts() //token should be NON_KEY_ID
    
   string x, y;
 
-	if (!isNonKeyId(nextToken()))
-  {
+	if (!isNonKeyId(token))
+    {
 			processError("non-keyword identifier expected");
 	}
 
 	x = ids();
 
 	if (token != ":")
-  {
+    {
 			processError(": expected");
 	}
     
-	if (isInteger(nextToken()) == false && isBoolean(nextToken()) == false)
-  {
+	nextToken();
+	if (isInteger(token) == false && isBoolean(token) == false)
+    {
 			processError("illegal type follows :");
 	}
 
 	y = token;
 
 	if (nextToken() != ";")
-  {
+    {
 			processError("semicolon expected");
 	}
 
 	insert(x, whichType(y), VARIABLE, "", YES, 1);
   
-	if (nextToken() != "begin" && !isNonKeyId(nextToken()))
-  {
+	nextToken();
+	if (token != "begin" && !isNonKeyId(token))
+    {
 			processError("non-keyword identifier or begin expected");
 	}
   
