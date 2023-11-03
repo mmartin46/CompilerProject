@@ -395,7 +395,7 @@ void Compiler::emitEpilogue(string operand1, string operand2)
 
 void Compiler::emitStorage()
 {
-  emit("SECTION", ".data");
+	emit("SECTION", ".data");
   map<string, SymbolTableEntry>::iterator iter = symbolTable.begin();
   for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
   {
@@ -403,7 +403,7 @@ void Compiler::emitStorage()
     {
 		// True = -1
 		// False = 0
-		// Look at Lecture (Week 10, Day 2, 30 Minute mark).
+		// Look at Lecture (Week 10, Day 2, 30 Minute mark.
 		string value = iter->second.getValue();
 		if (iter->second.getValue() == "false")
 		{
@@ -421,22 +421,10 @@ void Compiler::emitStorage()
   emit("SECTION", ".bss");
   for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
   {
-	// True = -1
-	// False = 0
-	// Look at Lecture (Week 10, Day 2, 30 Minute mark).	 
-	string value = iter->second.getValue();
-	if (iter->second.getValue() == "false")
-	{
-		value = "0";
-	}
-	else if (iter->second.getValue() == "true")
-	{
-		value = "-1";
-	}	
-	if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == VARIABLE))
-	{
-		emit(iter->second.getInternalName(), "resd", value, "; " + iter->first);
-	}
+  	if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == VARIABLE))
+    {
+    	emit(iter->second.getInternalName(), "resd", iter->second.getValue(), "; " + iter->first);
+    }
   }
   
 }
