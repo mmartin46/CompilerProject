@@ -22,7 +22,8 @@ void Compiler::parser()
 /* OTHER ROUTINES */
 void Compiler::processError(string err)
 {
-	listingFile << "processError(): Line #" << lineNo << ": " << err << endl;
+	listingFile << endl;
+	listingFile << "Error: Line " << lineNo << ": " << err << endl << endl;
 	++errorCount;
 	// Error count needs to be a zero or a one.
 	if (errorCount > 0)
@@ -277,7 +278,7 @@ void Compiler::createListingHeader()
 void Compiler::createListingTrailer()
 {
 	listingFile << "COMPILATION TERMINATED";
-	listingFile << "      " << errorCount << " ERRORS ENCOUNTERED" << endl;
+	listingFile << "      " << errorCount << " ERROR ENCOUNTERED" << endl;
 }
 
 
@@ -836,7 +837,7 @@ void Compiler::varStmts() //token should be NON_KEY_ID
 
 	if (token != ":")
     {
-			processError(": expected");
+			processError("\":\" expected");
 	}
     
 	nextToken();
