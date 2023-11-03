@@ -373,23 +373,24 @@ void Compiler::emit(string label, string instruction, string operands,
 	objectFile << left << setw(8) << label;
 	objectFile << left << setw(8) << instruction;
 	objectFile << left << setw(24) << operands;
-	objectFile << left << comment << endl;
+	objectFile << left << setw(24) << comment << endl;
 }
 
 void Compiler::emitPrologue(string progName, string operand2)
 {
-	time_t currTime;
+	time_t currTime = time(NULL);
 	string names = "CODY DIGBY, MITCHELL MARTIN";
 	string along1 = "%INCLUDE \"Along32.inc\"";
 	string along2 = "%INCLUDE \"Macros_Along.inc\"";
 	
 	// Writes the names, includes, and time to the object file.
-	objectFile << "; " << names << ctime(&currTime);
+	objectFile << "; " << names;
+	objectFile << left << setw(7) << ctime(&currTime);
 	objectFile << along1 << endl;
 	objectFile << along2 << endl << endl;
 	
 	emit("SECTION", ".text");
-	emit("global", "_start", "; program " + progName);
+	emit("global", "_start", "", "; program " + progName);
 	objectFile << endl;
 	emit("_start:");
 	
@@ -438,7 +439,7 @@ void Compiler::emitStorage()
   {
   	if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == VARIABLE))
     {
-    	emit(iter->second.getInternalName(), "resd", iter->second.getValue(), "; " + iter->first);
+    	emit(iter->second.getInternalName(), "resd", "1", "; " + iter->first);
     }
   }
   
