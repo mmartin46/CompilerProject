@@ -623,6 +623,19 @@ char Compiler::nextChar()
 // FIXME:: 
 /* GRAMMAR RULES */
 
+// Basically the psuedocode
+void Compiler::consts()
+{
+	if (token != "const")
+	{
+		processError("keyword \"const\" expected");
+	}
+	if (!isNonKeyId(nextToken()))
+	{
+		processError("non-keyword identifier must follow \"const\"");
+	}
+	constStmts();
+}
 
 // Basically the psuedocode
 void Compiler::vars()
