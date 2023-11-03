@@ -8,6 +8,17 @@
 #include <stdexcept>
 
 
+void Compiler::parser()
+{
+	nextChar();
+	nextToken();
+	if (token != "program")
+	{
+		processError("keyword \"program\" expected");
+	}
+	prog();
+}
+
 /* OTHER ROUTINES */
 void Compiler::processError(string err)
 {
@@ -255,15 +266,15 @@ void Compiler::createListingHeader()
 	string names = "CODY DIGBY, MITCHELL MARTIN";
 	
 	// The following needs to be sent to the listing file.";
-	listingFile << "STAGE0:" << setw(3) << names << setw(6) << ctime(&now)<< endl; 
-	listingFile << "LINE NO:" << setw(3) << setw(23) << "SOURCE STATEMENT" << "\r\n";
+	listingFile << "STAGE0:" << "  " << names << "      " << ctime(&now)<< endl; 
+	listingFile << "LINE NO:" << "                    " << "SOURCE STATEMENT" << "\r\n";
 	listingFile << "\n";
 }
 
 void Compiler::createListingTrailer()
 {
-	listingFile << "COMPILATION TERMINATED, ";
-	listingFile << errorCount << " ERRORS ENCOUNTERED" << endl;
+	listingFile << "COMPILATION TERMINATED";
+	listingFile << "      " << errorCount << " ERRORS ENCOUNTERED" << endl;
 }
 
 
