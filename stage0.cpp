@@ -278,7 +278,14 @@ void Compiler::createListingHeader()
 void Compiler::createListingTrailer()
 {
 	listingFile << "COMPILATION TERMINATED";
-	listingFile << "      " << errorCount << " ERROR ENCOUNTERED" << endl;
+	if (errorCount == 1)
+	{
+		listingFile << "      " << errorCount << " ERROR ENCOUNTERED" << endl;
+	}
+	else
+	{
+		listingFile << "      " << errorCount << " ERRORS ENCOUNTERED" << endl;
+	}
 }
 
 
