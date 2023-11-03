@@ -623,6 +623,27 @@ char Compiler::nextChar()
 // FIXME:: 
 /* GRAMMAR RULES */
 
+void Compiler::progStmt()
+{
+	string x;
+	if (token != "program")
+	{
+		processError("keyword \"program\" expected");
+	}
+	x = nextToken();
+	if (!isNonKeyId(token))
+	{
+		processError("program name expected");
+	}
+	if (nextToken() != ";")
+	{
+		processError("semicolon expected");
+	}
+	nextToken();
+	code("program", x);
+	insert(x, PROG_NAME, CONSTANT, x, NO, 0);
+}
+
 // Basically the psuedocode
 void Compiler::consts()
 {
@@ -717,7 +738,6 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   {
   	processError("semicolon expected");
   }
-  // FIXME: Not finished
   if ((whichType(y) != INTEGER) && (whichType(y) != BOOLEAN))
   {
 	processError("data type of token on the right-hand side must be INTEGER or BOOLEAN");
