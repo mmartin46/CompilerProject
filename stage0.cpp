@@ -625,7 +625,7 @@ char Compiler::nextChar()
 
 void Compiler::constStmts() //token should be NON_KEY_ID
 {
-	string x, y;
+  string x, y;
   if (isNonKeyId(token))
   {
   	processError("non-keyword identifier expected");
@@ -670,6 +670,20 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   	processError("semicolon expected");
   }
   // FIXME: Not finished
+  if ((whichType(y) != INTEGER) && (whichType(y) != BOOLEAN))
+  {
+	processError("data type of token on the right-hand side must be INTEGER or BOOLEAN");
+  }
+  insert(x, whichType(y), CONSTANT, whichValue(y), YES, 1);
+  x = nextToken();
+  if ((x != "begin") && (x != "var") && (!isNonKeyId(x)))
+  {
+	processError("non-keyword identifier, \"begin\", or \"var\" expected");
+  }
+  if (isNonKeyId(x))
+  {
+	constStmts();  
+  }
 }
 
 void Compiler::varStmts() //token should be NON_KEY_ID
