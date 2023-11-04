@@ -139,6 +139,7 @@ bool Compiler::isNonKeyId(string s) const
 		return false;
 	}
 	
+	int underscoreCount = 0;
 	for (size_t i = 1; i < sLength; ++i)
 	{
 		if (isSpecialSymbol(s[i]))
@@ -152,6 +153,16 @@ bool Compiler::isNonKeyId(string s) const
 		if (isalpha(s[i]) && !islower(s[i]))
 		{
 		    return false;
+		}
+		
+		if (s[i] == '_') 
+		{
+			// Only one underscore is allowed.
+			++underscoreCount;
+			if (underscoreCount > 1)
+			{
+				return false;
+			}
 		}
 	}
 	
@@ -286,6 +297,8 @@ void Compiler::createListingTrailer()
 
 
 /* ASSEMBLY FUNCTIONS */
+
+// SOMETHING IS WRONG HERE
 storeTypes Compiler::whichType(string name) //tells which data type a name has
 {
   storeTypes dataType;
@@ -641,7 +654,9 @@ char Compiler::nextChar()
 
 
 
+// FIXME:: 
 /* GRAMMAR RULES */
+
 void Compiler::prog()
 {
 	if (token != "program")
@@ -765,7 +780,6 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   }
   if (y == "not")
   {
-
   	if (whichType(nextToken()) != BOOLEAN)
     {
     	processError("boolean expected after \"not\"");
@@ -774,30 +788,10 @@ void Compiler::constStmts() //token should be NON_KEY_ID
     {
     	y = "false";
     }
-    else if (token == "false")
+    else
     {
     	y = "true";
     }
-	else
-	{
-		// Look up in the table
-		string savedToken = token;
-		auto isItFound = symbolTable.find(savedToken);
-
-		// Fetch the value
-		if (isItFound != symbolTable.end())
-		{
-			string value = isItFound->second.getValue();
-			if (value == "true")
-			{
-				y = "false";
-			}
-			else if (token == "false")
-			{
-				y = "true";
-			}
-		}
-	}
   }
   
   if (nextToken() != ";")
@@ -810,15 +804,14 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   }
   insert(x, whichType(y), CONSTANT, whichValue(y), YES, 1);
   x = nextToken();
-  if (isNonKeyId(x))
-  {
-	constStmts();  
-  }
   if ((x != "begin") && (x != "var") && (!isNonKeyId(x)))
   {
 	processError("non-keyword identifier, \"begin\", or \"var\" expected");
   }
-
+  if (isNonKeyId(x))
+  {
+	constStmts();  
+  }
 }
 
 void Compiler::varStmts() //token should be NON_KEY_ID
@@ -901,3 +894,4 @@ string Compiler::ids() //token should be NON_KEY_ID
    }
    return tempString;
 }
+// ::
