@@ -134,7 +134,7 @@ bool Compiler::isNonKeyId(string s) const
 		return false;
 	}
 	
-	if (s[0] == ' ')
+	if (s[0] == '_')
 	{
 		return false;
 	}
@@ -152,6 +152,15 @@ bool Compiler::isNonKeyId(string s) const
 		if (isalpha(s[i]) && !islower(s[i]))
 		{
 		    return false;
+		}
+		
+		// For 049.dat
+		if (s[i] == '_')
+		{
+			if (s[i-1] == '_')
+			{
+				return false;
+			}
 		}
 	}
 	
