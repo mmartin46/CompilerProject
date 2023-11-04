@@ -420,7 +420,7 @@ void Compiler::emitEpilogue(string operand1, string operand2)
 
 void Compiler::emitStorage()
 {
-  emit("SECTION", ".data");
+  emit("SECTION", ".data", "", "");
   map<string, SymbolTableEntry>::iterator iter = symbolTable.begin();
   for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
   {
