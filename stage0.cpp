@@ -769,6 +769,7 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   }
   if (y == "not")
   {
+	// .052.dat (CHECKS THE if the non_key_id exists after "not"
   	if (whichType(nextToken()) != BOOLEAN)
     {
 		// Look up in the table
@@ -803,6 +804,7 @@ void Compiler::constStmts() //token should be NON_KEY_ID
     }
 	else
 	{
+		// .052.dat (CHECKS THE if the non_key_id exists after "not"
 		// Look up in the table
 		string savedToken = token;
 		auto isItFound = symbolTable.find(savedToken);
