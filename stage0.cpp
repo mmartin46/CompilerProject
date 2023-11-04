@@ -139,7 +139,6 @@ bool Compiler::isNonKeyId(string s) const
 		return false;
 	}
 	
-	int underscoreCount = 0;
 	for (size_t i = 1; i < sLength; ++i)
 	{
 		if (isSpecialSymbol(s[i]))
@@ -153,16 +152,6 @@ bool Compiler::isNonKeyId(string s) const
 		if (isalpha(s[i]) && !islower(s[i]))
 		{
 		    return false;
-		}
-		
-		if (s[i] == '_') 
-		{
-			// Only one underscore is allowed.
-			++underscoreCount;
-			if (underscoreCount > 1)
-			{
-				return false;
-			}
 		}
 	}
 	
@@ -349,7 +338,7 @@ string Compiler::whichValue(string name) //tells which value a name has
 		}
     	else
     	{
-    		processError("reference to undefined constant");
+    		processError("reference to undefined constant" );
     	}
   	}
 	return value;
@@ -782,16 +771,60 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   {
   	if (whichType(nextToken()) != BOOLEAN)
     {
-    	processError("boolean expected after \"not\"");
-    }
+		// Look up in the table
+		string savedToken = token;
+		auto isItFound = symbolTable.find(savedToken);
+
+		// Fetch the value
+		if (isItFound != symbolTable.end())
+		{
+			string value = isItFound->second.getValue();
+			if (value == "true")
+			{
+				y = "false";
+			}
+			else if (value == "false")
+			{
+				y = "true";
+			}
+		}
+		else
+		{
+			processError("boolean expected after \"not\"");
+		}
+	}
     if (token == "true")
     {
     	y = "false";
     }
-    else
+    else if (token == "false")
     {
     	y = "true";
     }
+	else
+	{
+		// Look up in the table
+		string savedToken = token;
+		auto isItFound = symbolTable.find(savedToken);
+
+		// Fetch the value
+		if (isItFound != symbolTable.end())
+		{
+			string value = isItFound->second.getValue();
+			if (value == "true")
+			{
+				y = "false";
+			}
+			else if (value == "false")
+			{
+				y = "true";
+			}
+		}
+		else
+		{
+			processError("boolean expected after \"not\"");
+		}
+	}
   }
   
   if (nextToken() != ";")
