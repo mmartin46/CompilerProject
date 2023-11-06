@@ -295,8 +295,6 @@ void Compiler::createListingTrailer()
 
 
 /* ASSEMBLY FUNCTIONS */
-
-// SOMETHING IS WRONG HERE
 storeTypes Compiler::whichType(string name) //tells which data type a name has
 {
   storeTypes dataType;
@@ -461,6 +459,7 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 	
 	string::iterator str_itr = externalName.begin();
 	
+	
 	while (str_itr < externalName.end())
 	{
 		// GRABBING EACH NAME.
@@ -503,6 +502,11 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 					symbolTable.insert( { limitName, SymbolTableEntry(genInternalName(inType), inType, inMode, inValue, inAlloc, inUnits)} );        
 				}
 			}
+			// The symbol table will hold up to 256 entries.
+			if (symbolTable.size() > 256)
+			{
+				processError("cannot hold over 256 entries");
+			}
 		}
 		
 		if (str_itr == externalName.end())
@@ -512,12 +516,6 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 		else
 		{	
 			++str_itr;
-		}
-		
-		// The symbol table will hold up to 256 entries.
-		if (symbolTable.size() > 256)
-		{
-			processError("cannot hold over 256 entries");
 		}
 	}
 }
@@ -654,9 +652,7 @@ char Compiler::nextChar()
 
 
 
-// FIXME:: 
 /* GRAMMAR RULES */
-
 void Compiler::prog()
 {
 	if (token != "program")
@@ -773,6 +769,7 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   if ((y == "+") || (y == "-"))
   {
 	// 042.dat
+	// whichType() looks it up but it doesn't exist.
 	if (!isInteger(nextToken()))
 	{
     	processError("integer expected after sign");
@@ -851,7 +848,7 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   }  
   
 
-  
+ 
   if (nextToken() != ";")
   {
   	processError("semicolon expected");
