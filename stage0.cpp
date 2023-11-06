@@ -342,13 +342,14 @@ string Compiler::whichValue(string name) //tells which value a name has
   	else 
   	{
   		// IS DEFINED AND HAS A VALUE
+		
   		if ((symbolTable.count(name) > 0) && (iter->second.getValue() != ""))
     	{
     		value = iter->second.getValue();
 		}
     	else
     	{
-    		processError("reference to undefined constant" );
+			processError("reference to undefined constant" );
     	}
   	}
 	return value;
@@ -771,8 +772,9 @@ void Compiler::constStmts() //token should be NON_KEY_ID
   }
   if ((y == "+") || (y == "-"))
   {
-    if (whichType(nextToken()) != INTEGER)
-    {
+	// 042.dat
+	if (!isInteger(nextToken()))
+	{
     	processError("integer expected after sign");
     }
     y += token;
