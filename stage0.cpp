@@ -322,6 +322,7 @@ storeTypes Compiler::whichType(string name) //tells which data type a name has
     }
     else
     {
+		// Grabs '-big' and 'not'
     	processError("reference to undefined constant");
     }
   }
@@ -797,6 +798,11 @@ void Compiler::constStmts() //token should be NON_KEY_ID
 			{
 				y = "true";
 			}
+			else
+			{
+				// 043.dat
+				processError("boolean expected after \"not\"");
+			}
 		}
 		else
 		{
@@ -830,13 +836,19 @@ void Compiler::constStmts() //token should be NON_KEY_ID
 			{
 				y = "true";
 			}
+			else
+			{
+				processError("boolean expected after \"not\"");	
+			}
 		}
 		else
 		{
 			processError("boolean expected after \"not\"");
 		}
 	}
-  }
+  }  
+  
+
   
   if (nextToken() != ";")
   {
