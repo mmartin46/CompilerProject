@@ -320,7 +320,6 @@ storeTypes Compiler::whichType(string name) //tells which data type a name has
     }
     else
     {
-		// Grabs '-big' and 'not'
     	processError("reference to undefined constant");
     }
   }
