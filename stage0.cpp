@@ -37,14 +37,14 @@ void Compiler::processError(string err)
 
 string Compiler::genInternalName(storeTypes stype) const
 {
-    static int intIndex = 0;
-		static int boolIndex = 0;
+   static int intIndex = 0;
+	static int boolIndex = 0;
 		
-    string internalName;
+   string internalName;
     
-    switch (stype)
-    {
-    	case INTEGER:
+   switch (stype)
+   {
+      case INTEGER:
 		{
 			internalName = "I" + to_string(intIndex);
 			++intIndex;
@@ -58,10 +58,9 @@ string Compiler::genInternalName(storeTypes stype) const
 		}
 		default:
 		{}
-    
-    }
-    
-    return internalName;
+   }
+   
+   return internalName;
 }
 
 
@@ -151,7 +150,7 @@ bool Compiler::isNonKeyId(string s) const
 		// All lowercase
 		if (isalpha(s[i]) && !islower(s[i]))
 		{
-		    return false;
+		   return false;
 		}
 		
 		// For 049.dat
@@ -189,7 +188,9 @@ bool Compiler::isInteger(string s) const  // determines if s is an integer
 	{
 		return true;
 	}
+   
 	size_t i = 0;
+   
 	// If there is a + or -.
 	if (s.front() == '+' || s.front() == '-')
 	{
@@ -236,15 +237,14 @@ bool Compiler::isLiteral(string s) const// determines if s is a literal
 	{
 		return true;
 	}
+   
 	return false;
 }
-
 
 
 /* COMPILER FUNCTIONS */
 // Link: https://learn-us-east-1-prod-fleet02-xythos.content.blackboardcdn.com/5fb6991aeccdc/8422333?X-Blackboard-S3-Bucket=learn-us-east-1-prod-fleet01-xythos&X-Blackboard-Expiration=1698354000000&X-Blackboard-Signature=tQ0ruO8r8%2FWDciGQ5eHqZ5zWNwCiTnVjT%2BtUFxWzB5s%3D&X-Blackboard-Client-Id=100963&X-Blackboard-S3-Region=us-east-1&response-cache-control=private%2C%20max-age%3D21600&response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27OverallCompilerStructure%25282%2529.pdf&response-content-type=application%2Fpdf&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFAaCXVzLWVhc3QtMSJHMEUCIQDOh79wpa%2FC24mCI27En3XIud1XA5N4gUiE3b3AUmyYDAIgQNUM3kR6rD6dhNoPrXZxhvukGsRXmh8U3ox5s%2FXUfPcqswUIeRADGgw2MzU1Njc5MjQxODMiDBrZjT2T5P7PJ7ff5iqQBQXJSiAQa6if%2B26hbfIHlnlidCVd3dsYmCz0sdt2%2FzrOL3umkC4Zl7TynlAtEOi8YhG2H6%2BSOptr7RdoVPa92FCX9dnOrHv2%2Brhf6NsGZ5UYsGDT%2BGRFOSQaGNKYRxzhVFbiRLRY3REIW2zTlLgCU5CCwe3T1Hd2lbxeKgcWNi4%2BN4U9zHPIfbsSoJic6tGyJnxsuyhX34ffUcFiPtPYWPQfelmkQIbl1q%2FxH0xBrK%2BfOxjy5GE6NN4L2U2gJW5wdr9lTv%2BCbTIMTEXcZ5vOCMS8%2BLEAd4sNp66cyLzVSSMhcySAVAc7ZcnX%2B2WdVHRx729TCsa9VqDi5s%2BCwCkdeeXgJHOMjp1QBy6n%2FbN%2BKzNBUpyCquY%2BtRscoE6AI%2BPGSYFwvwDOZ%2Fc2gb%2B51jFfX5cbUQSVX2IsogL4%2BubYx5o%2Bbs%2FW%2FkW1Vza8CMEvv0bnnOwuf0ruUqwQYrA8KuQ1xcHKpUjsIs%2FCYJtTMUM7DysgLVW%2Fz8Dn9tWq59mTtzuVDT2mQ9795%2FbLGSgGPTFqG9d%2BPiscieu3hdc%2F1Cwh6swFLVriuc7Fmni8HhLOA7uCt0NBMBmNh9FFUEmUM7embbw3djRx41ZcVtdJ65%2BqQHEz9WzJG1DxNzsm0t4yAC9GPiQ9vDqAohiBizfa0riIZpU%2F0pUOI5msPFR36mfGDRMET9RLGO15hP7jKiD2z2PcpT1IAsYew1UVmsT1c8bwwpINy%2BInH58mPrsMItsjhe7S3S%2BqNkw8gdFcvDuBmB1hhtImc4jgGeaoNE8x7Orl4HNe%2BT%2BDPfTCeo815z%2FfJhVQs4f6NLgaOACTEfjsMVPEVGKVmcHnbgLD4vBtJLwMbKTmlgWSc6%2F%2BMwSpI2ilNOk0MJ6W6qkGOrEBk5gOfsGy7%2FtDwIlT7p538%2FlvdwymUNN4hBp8db8aAF%2FlqL259wFfcfdWVK%2BZAHArcnvt0MZoUU6FtcdsSx6DxuOAyNVVFHuornCT8HMb%2Bm4JVm1nusJWIW86%2BShuz8mZdqCVoS2vAsjW%2Fq6SfF7RAa7CFZ5zYF6dhvDNOQu9vNgBckt3orAnc%2BXnhayf1EGtuILZUAqzibTiGmuva4KVVY6cI9OvdPFjeFceugJ65XZn&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20231026T150000Z&X-Amz-SignedHeaders=host&X-Amz-Expires=21600&X-Amz-Credential=ASIAZH6WM4PL4MDLYE7C%2F20231026%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d8e8b88cb7bc4daf837795f31e75dc0ed09de94a53cc5265b153f38a8efb120d
 // Page 6 
-
 Compiler::Compiler(char **argv)
 {
 
@@ -287,13 +287,6 @@ void Compiler::createListingTrailer()
 }
 
 
-
-
-
-
-
-
-
 /* ASSEMBLY FUNCTIONS */
 storeTypes Compiler::whichType(string name) //tells which data type a name has
 {
@@ -302,27 +295,28 @@ storeTypes Compiler::whichType(string name) //tells which data type a name has
   
   if (isLiteral(name))
   {
-  	if (isBoolean(name))
-    {
-    	dataType = BOOLEAN;
-    }
-    else
-    {
-    	dataType = INTEGER;
-    }
+      if (isBoolean(name))
+      {
+         dataType = BOOLEAN;
+      }
+      else
+      {
+         dataType = INTEGER;
+      }
   }
   else
   {
-  	// if symbolTable[name] is defined 
-  	if (symbolTable.count(name) > 0)
-    {
-    	dataType = iter->second.getDataType();
-    }
-    else
-    {
-    	processError("reference to undefined constant");
-    }
+      // if symbolTable[name] is defined 
+      if (symbolTable.count(name) > 0)
+      {
+         dataType = iter->second.getDataType();
+      }
+      else
+      {
+         processError("reference to undefined constant");
+      }
   }
+  
   return dataType;
 }
 
@@ -339,7 +333,6 @@ string Compiler::whichValue(string name) //tells which value a name has
   	else 
   	{
   		// IS DEFINED AND HAS A VALUE
-		
   		if ((symbolTable.count(name) > 0) && (iter->second.getValue() != ""))
     	{
     		value = iter->second.getValue();
@@ -349,24 +342,25 @@ string Compiler::whichValue(string name) //tells which value a name has
 			processError("reference to undefined constant" );
     	}
   	}
+   
 	return value;
 }
 
 
 void Compiler::code(string op, string operand1, string operand2)
 {
- 	if (op == "program")
-  {
-  	emitPrologue(operand1);
-  }
-  else if (op == "end")
-  {
-  	emitEpilogue();
-  }
-  else
-  {
-  	processError("compiler error since function code should not be called with illegal arguments");
-  }
+   if (op == "program")
+   {
+      emitPrologue(operand1);
+   }
+   else if (op == "end")
+   {
+      emitEpilogue();
+   }
+   else
+   {
+      processError("compiler error since function code should not be called with illegal arguments");
+   }
 }
 
 
@@ -419,36 +413,36 @@ void Compiler::emitStorage()
 {
   emit("SECTION", ".data", "", "");
   map<string, SymbolTableEntry>::iterator iter = symbolTable.begin();
+  
   for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
   {
-  	if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == CONSTANT))
-    {
-		// True = -1
-		// False = 0
-		// Look at Lecture (Week 10, Day 2, 30 Minute mark.
-		string value = iter->second.getValue();
-		if (iter->second.getValue() == "false")
-		{
-			value = "0";
-		}
-		else if (iter->second.getValue() == "true")
-		{
-			value = "-1";
-		}
-    	emit(iter->second.getInternalName(), "dd", value, "; " + iter->first);
-    }
+      if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == CONSTANT))
+      {
+         // True = -1
+         // False = 0
+         // Look at Lecture (Week 10, Day 2, 30 Minute mark.
+         string value = iter->second.getValue();
+         if (iter->second.getValue() == "false")
+         {
+            value = "0";
+         }
+         else if (iter->second.getValue() == "true")
+         {
+            value = "-1";
+         }
+         emit(iter->second.getInternalName(), "dd", value, "; " + iter->first);
+      }
   }
   
   objectFile << "\n";
   emit("SECTION", ".bss");
   for (iter = symbolTable.begin(); iter != symbolTable.end(); ++iter)
   {
-  	if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == VARIABLE))
-    {
-    	emit(iter->second.getInternalName(), "resd", "1", "; " + iter->first);
-    }
+      if ((iter->second.getAlloc()) == YES && (iter->second.getMode() == VARIABLE))
+      {
+         emit(iter->second.getInternalName(), "resd", "1", "; " + iter->first);
+      }
   }
-  
 }
 
 void Compiler::insert(string externalName, storeTypes inType, modes inMode,
@@ -520,18 +514,7 @@ void Compiler::insert(string externalName, storeTypes inType, modes inMode,
 }
 
 
-
-
-
-
-
-
-
-
-
 /* LEXICAL FUNCTIONS */
-
-
 // Basically implementing the psuedocode.
 string Compiler::nextToken()
 {
@@ -591,6 +574,7 @@ string Compiler::nextToken()
 			{
 				token += ch;
 			}
+         
 			if (ch == END_OF_FILE)
 			{
 				processError("unexpected end of file");
@@ -647,10 +631,6 @@ char Compiler::nextChar()
 }
 
 
-
-
-
-
 /* GRAMMAR RULES */
 void Compiler::prog()
 {
@@ -658,20 +638,26 @@ void Compiler::prog()
 	{
 		processError("keyword \"program\" expected");
 	}
+   
 	progStmt();
+   
 	if (token == "const")
 	{
 		consts();
 	}
+   
 	if (token == "var")
 	{
 		vars();
 	}
+   
 	if (token != "begin")
 	{
 		processError("keyword \"begin\" expected");
 	}
+   
 	beginEndStmt();
+   
 	if (token != "$")
 	{
 		processError("no text may follow \"end\"");
@@ -681,19 +667,24 @@ void Compiler::prog()
 void Compiler::progStmt()
 {
 	string x;
+   
 	if (token != "program")
 	{
 		processError("keyword \"program\" expected");
 	}
+   
 	x = nextToken();
+   
 	if (!isNonKeyId(token))
 	{
 		processError("program name expected");
 	}
+   
 	if (nextToken() != ";")
 	{
 		processError("semicolon expected");
 	}
+   
 	nextToken();
 	code("program", x);
 	insert(x, PROG_NAME, CONSTANT, x, NO, 0);
@@ -706,10 +697,12 @@ void Compiler::consts()
 	{
 		processError("keyword \"const\" expected");
 	}
+   
 	if (!isNonKeyId(nextToken()))
 	{
 		processError("non-keyword identifier must follow \"const\"");
 	}
+   
 	constStmts();
 }
 
@@ -720,10 +713,12 @@ void Compiler::vars()
 	{
 		processError("keyword \"var\" expected");
 	}
+   
 	if (!isNonKeyId(nextToken()))
 	{
 		processError("non-keyword identifier must follow \"var\"");
 	}
+   
 	varStmts();
 }
 
@@ -734,14 +729,17 @@ void Compiler::beginEndStmt()
 	{
 		processError("keyword \"begin\" expected");
 	}
+   
 	if (nextToken() != "end")
 	{
 		processError("keyword \"end\" expected");
 	}
+   
 	if (nextToken() != ".")
 	{
 		processError("period expected");
 	}
+   
 	nextToken();
 	code("end", ".");
 }
@@ -750,181 +748,176 @@ void Compiler::beginEndStmt()
 void Compiler::constStmts() //token should be NON_KEY_ID
 {
   string x, y;
+  
   if (!isNonKeyId(token))
   {
-  	processError("non-keyword identifier expected");
+      processError("non-keyword identifier expected");
   }
+  
   x = token;
+  
   if (nextToken() != "=")
   {
-  	processError("\"=\" expected");
+      processError("\"=\" expected");
   }
+  
   y = nextToken();
   
   if ( (y != "+") && (y != "-") && (y != "not") && (!isNonKeyId(y)) && (whichType(y) != BOOLEAN) && (whichType(y) != INTEGER) )
   {
-  	processError("token to the right of \"=\" illegal");
+      processError("token to the right of \"=\" illegal");
   }
+  
   if ((y == "+") || (y == "-"))
   {
-	// 042.dat
-	// whichType() looks it up but it doesn't exist.
-	if (!isInteger(nextToken()))
-	{
-    	processError("integer expected after sign");
-    }
-    y += token;
+      // 042.dat
+      // whichType() looks it up but it doesn't exist.
+      if (!isInteger(nextToken()))
+      {
+         processError("integer expected after sign");
+      }
+      
+      y += token;
   }
+  
   if (y == "not")
   {
-	// .052.dat (CHECKS THE if the non_key_id exists after "not"
-  	if (whichType(nextToken()) != BOOLEAN)
-    {
-		// Look up in the table
-		string savedToken = token;
-		auto isItFound = symbolTable.find(savedToken);
+      // .052.dat (CHECKS THE if the non_key_id exists after "not"
+      if (whichType(nextToken()) != BOOLEAN)
+      {
+         // Look up in the table
+         string savedToken = token;
+         auto isItFound = symbolTable.find(savedToken);
 
-		// Fetch the value
-		if (isItFound != symbolTable.end())
-		{
-			string value = isItFound->second.getValue();
-			if (value == "true")
-			{
-				y = "false";
-			}
-			else if (value == "false")
-			{
-				y = "true";
-			}
-			else
-			{
-				// 043.dat
-				processError("boolean expected after \"not\"");
-			}
-		}
-		else
-		{
-			processError("boolean expected after \"not\"");
-		}
-	}
-    if (token == "true")
-    {
-    	y = "false";
-    }
-    else if (token == "false")
-    {
-    	y = "true";
-    }
-	else
-	{
-		// .052.dat (CHECKS THE if the non_key_id exists after "not"
-		// Look up in the table
-		string savedToken = token;
-		auto isItFound = symbolTable.find(savedToken);
+         // Fetch the value
+         if (isItFound != symbolTable.end())
+         {
+            string value = isItFound->second.getValue();
+            if (value == "true")
+            {
+               y = "false";
+            }
+            else if (value == "false")
+            {
+               y = "true";
+            }
+            else
+            {
+               // 043.dat
+               processError("boolean expected after \"not\"");
+            }
+         }
+         else
+         {
+            processError("boolean expected after \"not\"");
+         }
+      }
+      
+      if (token == "true")
+      {
+         y = "false";
+      }
+      else if (token == "false")
+      {
+         y = "true";
+      }
+      else
+      {
+         // .052.dat (CHECKS THE if the non_key_id exists after "not"
+         // Look up in the table
+         string savedToken = token;
+         auto isItFound = symbolTable.find(savedToken);
 
-		// Fetch the value
-		if (isItFound != symbolTable.end())
-		{
-			string value = isItFound->second.getValue();
-			if (value == "true")
-			{
-				y = "false";
-			}
-			else if (value == "false")
-			{
-				y = "true";
-			}
-			else
-			{
-				processError("boolean expected after \"not\"");	
-			}
-		}
-		else
-		{
-			processError("boolean expected after \"not\"");
-		}
-	}
-  }  
-  
-
+         // Fetch the value
+         if (isItFound != symbolTable.end())
+         {
+            string value = isItFound->second.getValue();
+            if (value == "true")
+            {
+               y = "false";
+            }
+            else if (value == "false")
+            {
+               y = "true";
+            }
+            else
+            {
+               processError("boolean expected after \"not\"");	
+            }
+         }
+         else
+         {
+            processError("boolean expected after \"not\"");
+         }
+      }
+   }
  
   if (nextToken() != ";")
   {
-  	processError("semicolon expected");
+      processError("semicolon expected");
   }
+  
   if ((whichType(y) != INTEGER) && (whichType(y) != BOOLEAN))
   {
-	processError("data type of token on the right-hand side must be INTEGER or BOOLEAN");
+      processError("data type of token on the right-hand side must be INTEGER or BOOLEAN");
   }
+  
   insert(x, whichType(y), CONSTANT, whichValue(y), YES, 1);
   x = nextToken();
+  
   if ((x != "begin") && (x != "var") && (!isNonKeyId(x)))
   {
-	processError("non-keyword identifier, \"begin\", or \"var\" expected");
+      processError("non-keyword identifier, \"begin\", or \"var\" expected");
   }
+  
   if (isNonKeyId(x))
   {
-	constStmts();  
+      constStmts();  
   }
 }
 
 void Compiler::varStmts() //token should be NON_KEY_ID
-{ /*
-   if (token is not a NON_KEY_ID)
-   processError(non-keyword identifier expected)
-   x = ids()
-   if (token != ":")
-   processError(":" expected)
-   if (nextToken() is not one of "integer","boolean")
-   processError(illegal type follows ":")
-  y = token
-   if (nextToken() != ";")
-   processError(semicolon expected)
-   insert(x,y,VARIABLE,"",YES,1)
-   if (nextToken() is not one of "begin",NON_KEY_ID)
-   processError(non-keyword identifier or "begin" expected)
-   if (token is a NON_KEY_ID)
-   varStmts()
-   */
-   
+{  
   string x, y;
 
 	if (!isNonKeyId(token))
-    {
-			processError("non-keyword identifier expected");
+   	{
+		processError("non-keyword identifier expected");
 	}
 
 	x = ids();
 
 	if (token != ":")
-    {
-			processError("\":\" expected");
+  	{
+		processError("\":\" expected");
 	}
     
 	nextToken();
+   
 	if ((token != "integer") && (token != "boolean"))
-    {
-			processError("illegal type follows \":\"");
+   	{
+		processError("illegal type follows \":\"");
 	}
 
 	y = token;
 
 	if (nextToken() != ";")
-    {
-			processError("semicolon expected");
+   	{
+		processError("semicolon expected");
 	}
 
 	insert(x, whichType(y), VARIABLE, "", YES, 1);
   
 	nextToken();
+   
 	if ((token != "begin") && (!isNonKeyId(token)))
-    {
-			processError("non-keyword identifier or begin expected");
+   	{
+		processError("non-keyword identifier or begin expected");
 	}
   
 	if (isNonKeyId(token))
 	{
-			varStmts();
+		varStmts();
 	}
 }
 
@@ -934,18 +927,21 @@ string Compiler::ids() //token should be NON_KEY_ID
    string temp, tempString;
    if (!isNonKeyId(token))
    {
-   		processError("non-keyword identifier expected");
+   	processError("non-keyword identifier expected");
    }
+   
    tempString = token;
    temp = token;
+   
    if (nextToken() == ",")
    {
-   		if (!isNonKeyId(nextToken()))
+   	if (!isNonKeyId(nextToken()))
       {
-      		processError("non-keyword identifier expected");
+      	processError("non-keyword identifier expected");
       }
+      
       tempString = temp + "," + ids();
    }
+   
    return tempString;
 }
-// ::
