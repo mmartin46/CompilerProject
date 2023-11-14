@@ -1073,65 +1073,122 @@ void Compiler::assignStmt() // stage 1, production 4
 
 void Compiler::readStmt() // stage 1, production 5
 {
-
+	// FIXME: Finish
 
 }
-
 
 
 void Compiler::writeStmt() // stage 1, production 7
 {
-
+	// FIXME: Finish
 
 }
 
 
-
 void Compiler::express() // stage 1, production 9
 {
-
+	// FIXME: Finish
 
 }
 
 void Compiler::expresses() // stage 1, production 10
 {
-
-
+	// FIXME: Finish
 }
 
 void Compiler::term() // stage 1, production 11
 {
-
-
+	// FIXME: Finish
 }
 
 void Compiler::terms() // stage 1, production 12
 {
-
-
-
+	// FIXME: Finish
 }
 
 void Compiler::factor() // stage 1, production 13
 {
-
-
+	// FIXME: Finish
 }
 
 void Compiler::factors() // stage 1, production 14
 {
-
-
+	// FIXME: Finish
 }
 
 void Compiler::part() // stage 1, production 15
 {
-
-
+	// FIXME: Finish
 }
 
 
 
+
+void Compiler::freeTemp()
+{
+		// FIXME: Finish
+}
+
+string Compiler::getTemp()
+{
+	// FIXME: Finish
+	return "";
+}
+
+string Compiler::getLabel()
+{
+	// FIXME: Finish
+	return "";	
+}
+
+bool Compiler::isTemporary(string s) const // determines if s represents a temporary
+{
+	// FIXME: Finish
+	return false;
+}
+
+
+
+// Push and Pop
+
+void Compiler::pushOperator(string name) //push name onto operatorStk
+{
+	/*
+	push name onto stack;
+  */
+}
+
+void Compiler::pushOperand(string name) //push name onto operandStk
+//if name is a literal, also create a symbol table entry for it
+{
+	/*
+ 	if name is a literal and has no symbol table entry
+ 	insert symbol table entry, call whichType to determine the data type of the literal
+ 	push name onto stack;
+  */
+}
+
+string Compiler::popOperator() //pop name from operatorStk
+{
+	/*
+ 	if operatorStk is not empty
+ 	return top element removed from stack;
+ 	else
+ 	processError(compiler error; operator stack underflow)
+  */
+  return "";
+}
+
+string Compiler::popOperand() //pop name from operandStk
+{
+	/*
+ 	if operandStk is not empty
+ 	return top element removed from stack;
+ 	else
+ 	processError(compiler error; operand stack underflow)
+  */
+  return "";
+}
 
 
 
