@@ -4,7 +4,7 @@
 
 #include <string>
 #include <iomanip>
-#include <stage0.h>
+#include <stage1.h>
 #include <stdexcept>
 
 
@@ -958,3 +958,183 @@ string Compiler::ids() //token should be NON_KEY_ID
    return tempString;
 }
 // ::
+
+
+void Compiler::emitReadCode(string operand1, string operand2)
+{
+	
+}
+
+void Compiler::emitWriteCode(string operand1, string operand2)
+{
+	
+}
+
+void Compiler::emitAssignCode(string operand1, string operand2)         // op2 = op1			
+{
+	
+}
+void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +  op1			
+{
+	
+}
+
+void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -  op1			
+{
+	
+}
+
+void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *  op1			
+{
+	
+}
+
+void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /  op1			
+{
+	
+}
+
+void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %  op1			
+{
+	
+}
+
+void Compiler::emitNegationCode(string operand1, string operand2)           // -op1					
+{
+	
+}
+
+void Compiler::emitNotCode(string operand1, string operand2)                // !op1
+{
+	
+}
+
+void Compiler::emitAndCode(string operand1, string operand2)            // op2 && op1			
+{
+	
+}
+
+void Compiler::emitOrCode(string operand1, string operand2)             // op2 || op1			
+{
+	
+}
+
+void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 == op1			
+{
+	
+}
+
+void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 != op1			
+{
+	
+}
+
+void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <  op1			
+{
+	
+}
+
+void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op2 <= op1		
+{
+	
+}
+
+void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >  op1			
+{
+	
+}
+
+void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) // op2 >= op1		
+{
+	
+}
+
+
+
+
+
+void Compiler::execStmts() // stage 1, production 2
+{
+
+
+}
+
+void Compiler::execStmt() // stage 1, production 3
+{
+
+
+}
+
+void Compiler::assignStmt() // stage 1, production 4
+{
+
+
+}
+
+void Compiler::readStmt() // stage 1, production 5
+{
+
+
+}
+
+
+
+void Compiler::writeStmt() // stage 1, production 7
+{
+
+
+}
+
+
+
+void Compiler::express() // stage 1, production 9
+{
+
+
+}
+
+void Compiler::expresses() // stage 1, production 10
+{
+
+
+}
+
+void Compiler::term() // stage 1, production 11
+{
+
+
+}
+
+void Compiler::terms() // stage 1, production 12
+{
+
+
+
+}
+
+void Compiler::factor() // stage 1, production 13
+{
+
+
+}
+
+void Compiler::factors() // stage 1, production 14
+{
+
+
+}
+
+void Compiler::part() // stage 1, production 15
+{
+
+
+}
+
+
+
+
+
+
+
+
+
