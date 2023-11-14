@@ -1,6 +1,6 @@
 // Cody Digby and Mitchell Martin
 // CS 4301
-// Stage 0
+// Stage 1
 
 #include <string>
 #include <iomanip>
