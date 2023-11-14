@@ -370,6 +370,78 @@ void Compiler::code(string op, string operand1, string operand2)
   {
   	emitEpilogue();
   }
+  else if (op == "read")
+  {
+   	emitReadCode(operand1, operand2);
+  }
+  else if (op == "write")
+  {
+  	emitWriteCode(operand1, operand2);
+  }
+  else if (op == "+") // this must be binary '+'
+  {
+  	emitAdditionCode(operand1, operand2);
+  }
+  else if (op == "-") // this must be binary '-'
+  {
+  	emitSubtractionCode(operand1, operand2);
+  }
+  else if (op == "neg") // this must be unary '-'
+  {
+		emitNegationCode(operand1, operand2);
+	}
+  else if (op == "not")
+  {
+  	emitNotCode(operand1, operand2);
+  } 
+  else if (op == "*")
+  {
+  	 emitMultiplicationCode(operand1, operand2);
+  } 
+  else if (op == "div")
+  {
+  	 emitDivisionCode(operand1, operand2);
+  }
+  else if (op == "mod")
+  {
+  	 emitModuloCode(operand1, operand2);
+  }
+  else if (op == "and")
+  {
+   	 emitAndCode(operand1, operand2);
+  }
+  else if (op == "or")
+  {
+  	 emitOrCode(operand1, operand2);
+  }
+  else if (op == "=")
+  {
+		 emitEqualityCode(operand1, operand2);
+  }
+  else if (op == ":=")
+  {
+   	 emitAssignCode(operand1, operand2);
+  }
+  else if (op == "<>")
+  {
+  	 emitInequalityCode(operand1, operand2);
+  }
+  else if (op == "<")
+  {
+  	 emitLessThanCode(operand1, operand2);
+  }
+  else if (op == "<=")
+  {
+  	 emitLessThanOrEqualToCode(operand1, operand2);
+  }
+  else if (op == ">")
+  {
+     emitGreaterThanCode(operand1, operand2);
+  }
+  else if (op == ">=")
+  {
+  	 emitGreaterThanOrEqualToCode(operand1, operand2);
+  }
   else
   {
   	processError("compiler error since function code should not be called with illegal arguments");
@@ -878,24 +950,7 @@ void Compiler::constStmts() //token should be NON_KEY_ID
 }
 
 void Compiler::varStmts() //token should be NON_KEY_ID
-{ /*
-   if (token is not a NON_KEY_ID)
-   processError(non-keyword identifier expected)
-   x = ids()
-   if (token != ":")
-   processError(":" expected)
-   if (nextToken() is not one of "integer","boolean")
-   processError(illegal type follows ":")
-  y = token
-   if (nextToken() != ";")
-   processError(semicolon expected)
-   insert(x,y,VARIABLE,"",YES,1)
-   if (nextToken() is not one of "begin",NON_KEY_ID)
-   processError(non-keyword identifier or "begin" expected)
-   if (token is a NON_KEY_ID)
-   varStmts()
-   */
-   
+{  
   string x, y;
 
 	if (!isNonKeyId(token))
@@ -957,8 +1012,9 @@ string Compiler::ids() //token should be NON_KEY_ID
    }
    return tempString;
 }
-// ::
 
+
+// Stage 1 ::
 
 void Compiler::emitReadCode(string operand1, string operand2)
 {
