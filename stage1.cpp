@@ -1126,13 +1126,27 @@ void Compiler::part() // stage 1, production 15
 
 void Compiler::freeTemp()
 {
-		// FIXME: Finish
+    currentTempNo--;
+    if (currentTempNo < -1)
+    {
+    	string err = "compiler error, " + to_string(currentTempNo) + "should be >= -1";
+    	processError(err);
+    }
 }
 
 string Compiler::getTemp()
 {
-	// FIXME: Finish
-	return "";
+  string temp;
+  currentTempNo++;
+  temp = "T" + to_string(currentTempNo);
+  
+  if (currentTempNo > maxTempNo)
+  {
+  	insert(temp, UNKNOWN, VARIABLE, "", NO, 1);
+    maxTempNo++;
+  }
+  
+	return temp;
 }
 
 string Compiler::getLabel()
@@ -1144,13 +1158,12 @@ string Compiler::getLabel()
 bool Compiler::isTemporary(string s) const // determines if s represents a temporary
 {
 	// FIXME: Finish
-	return false;
+  return (s[0] == 'T');
 }
 
 
 
 // Push and Pop
-
 void Compiler::pushOperator(string name) //push name onto operatorStk
 {
 	/*
