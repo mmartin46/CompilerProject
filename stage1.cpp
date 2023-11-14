@@ -73,7 +73,7 @@ bool Compiler::isKeyword(string s) const// determines if s is a keyword
 {
 	// List of legal keywords
 	string keyWords[] = { "program", "const", "var", "integer", "boolean", "begin",
-	"end", "true", "false", "not" };
+	"end", "true", "false", "not", "mod", "div", "and", "or", "read", "write" }; 
 
 	// Check if there is a match.
 	bool keyFound = false;
@@ -94,7 +94,7 @@ bool Compiler::isKeyword(string s) const// determines if s is a keyword
 bool Compiler::isSpecialSymbol(char c) const
 {
 	// List of special symbols.
-	char specialSymbols[] = { ':', ',', ';', '=', '+', '-', '.' };
+	char specialSymbols[] = { ':', ',', ';', '=', '+', '-', '.', '*', '(', ')', '<', '>', '<' };
 	
 	// Check for a match
 	bool symFound = false;
