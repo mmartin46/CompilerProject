@@ -1310,6 +1310,13 @@ string Compiler::popOperand() //pop name from operandStk
  	else
  	processError(compiler error; operand stack underflow)
   */
+  if (!operandStk.empty())
+  {
+	string op = operandStk.top();
+	operandStk.pop();
+	return op;
+  }
+  processError("compiler error; operator stack underflow");
   return "";
 }
 
