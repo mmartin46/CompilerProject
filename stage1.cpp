@@ -1213,6 +1213,58 @@ void Compiler::factors() // stage 1, production 14
 void Compiler::part() // stage 1, production 15
 {
 	// FIXME: Finish
+	if ((token == "+"))
+	{
+		nextToken();
+		if (token == "(")
+		{
+			nextToken();
+			// FIXME:
+			// Write EXPRESSION
+			if (token != ")")
+			{
+				processError("No matching closing parenthesis");
+			}
+			// FIXME:
+			// VALID / NEXT PART
+		}
+		if (isInteger(token))
+		{
+			// FIXME:
+			// VALID / NEXT PART
+		}
+		if (isNonKeyId(token))
+		{
+			// FIXME:
+			// VALID / NEXT PART
+		}
+	}
+	if ((token == "-"))
+	{
+		nextToken();
+		if (token == "(")
+		{
+			nextToken();
+			// FIXME:
+			// Write EXPRESSION
+			if (token != ")")
+			{
+				processError("No matching closing parenthesis");
+			}
+			// FIXME:
+			// VALID / NEXT PART
+		}
+		if (isInteger(token))
+		{
+			// FIXME:
+			// VALID / NEXT PART
+		}
+		if (isNonKeyId(token))
+		{
+			// FIXME:
+			// VALID / NEXT PART
+		}
+	}
 }
 
 // ::
@@ -1251,7 +1303,6 @@ string Compiler::getLabel()
 
 bool Compiler::isTemporary(string s) const // determines if s represents a temporary
 {
-	// FIXME: Finish
   return (s[0] == 'T');
 }
 
@@ -1304,12 +1355,6 @@ string Compiler::popOperator() //pop name from operatorStk
 
 string Compiler::popOperand() //pop name from operandStk
 {
-	/*
- 	if operandStk is not empty
- 	return top element removed from stack;
- 	else
- 	processError(compiler error; operand stack underflow)
-  */
   if (!operandStk.empty())
   {
 	string op = operandStk.top();
