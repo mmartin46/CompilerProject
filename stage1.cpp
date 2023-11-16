@@ -61,12 +61,6 @@ string Compiler::genInternalName(storeTypes stype) const
 			++boolIndex;
 			break;
 		}
-		case UNKNOWN:
-		{
-			internalName = "T" + to_string(tempIndex);
-			++tempIndex;
-			break;
-		}
 		default:
 		{}
     
