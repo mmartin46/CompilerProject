@@ -42,8 +42,9 @@ void Compiler::processError(string err)
 string Compiler::genInternalName(storeTypes stype) const
 {
     static int intIndex = 0;
-		static int boolIndex = 0;
-		
+	static int boolIndex = 0;
+	static int tempIndex = 0;
+	
     string internalName;
     
     switch (stype)
@@ -58,6 +59,12 @@ string Compiler::genInternalName(storeTypes stype) const
 		{
 			internalName = "B" + to_string(boolIndex);
 			++boolIndex;
+			break;
+		}
+		case UNKNOWN:
+		{
+			internalName = "T" + to_string(tempIndex);
+			++tempIndex;
 			break;
 		}
 		default:
@@ -1312,7 +1319,6 @@ string Compiler::popOperand() //pop name from operandStk
 }
 
 // ::
-
 
 
 
