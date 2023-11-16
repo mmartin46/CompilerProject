@@ -1213,6 +1213,32 @@ void Compiler::factors() // stage 1, production 14
 void Compiler::part() // stage 1, production 15
 {
 	// FIXME: Finish
+	if ((token == "not"))
+	{
+		nextToken();
+		if (token == "(")
+		{
+			nextToken();
+			// FIXME:
+			// Write EXPRESSION
+			if (token != ")")
+			{
+				processError("No matching closing parenthesis");
+			}
+			// FIXME:
+			// VALID / NEXT PART
+		}
+		if (isBoolean(token))
+		{
+			// FIXME:
+			// VALID / NEXT PART			
+		}
+		if (isNonKeyId(token))
+		{
+			// FIXME:
+			// VALID / NEXT PART						
+		}
+	}
 	if ((token == "+"))
 	{
 		nextToken();
@@ -1264,6 +1290,19 @@ void Compiler::part() // stage 1, production 15
 			// FIXME:
 			// VALID / NEXT PART
 		}
+	}
+	nextToken();
+	if (token == "(")
+	{
+		nextToken();
+		// FIXME:
+		// Write EXPRESSION
+		if (token != ")")
+		{
+			processError("No matching closing parenthesis");
+		}
+		// FIXME:
+		// VALID / NEXT PART
 	}
 }
 
