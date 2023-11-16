@@ -43,7 +43,6 @@ string Compiler::genInternalName(storeTypes stype) const
 {
     static int intIndex = 0;
 	static int boolIndex = 0;
-	static int tempIndex = 0;
 	
     string internalName;
     
@@ -1158,6 +1157,7 @@ void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) //
 void Compiler::execStmts() // stage 1, production 2
 {
 	// FIXME: Finish
+	
 }
 
 void Compiler::execStmt() // stage 1, production 3
@@ -1292,12 +1292,13 @@ void Compiler::pushOperand(string name) //push name onto operandStk
 
 string Compiler::popOperator() //pop name from operatorStk
 {
-	/*
- 	if operatorStk is not empty
- 	return top element removed from stack;
- 	else
- 	processError(compiler error; operator stack underflow)
-  */
+  if (!operatorStk.empty())
+  {
+	string op = operatorStk.top();
+	operandStk.pop();
+	return op;
+  }
+  processError("compiler error; operator stack underflow");
   return "";
 }
 
