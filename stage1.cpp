@@ -1157,17 +1157,57 @@ void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) //
 void Compiler::execStmts() // stage 1, production 2
 {
 	// FIXME: Finish
-	
+
 }
 
 void Compiler::execStmt() // stage 1, production 3
 {
-	// FIXME: Finish
+	if (isNonKeyId(token))
+	{
+		assignStmt();
+	}
+	else if (token == "read")
+	{
+		readStmt();
+	}
+	else if (token == "write")
+	{
+		writeStmt();
+	}
+	else
+	{
+		processError("non-keyword identifier, \"read\", or \"write\" expected");
+	}
 }
 
 void Compiler::assignStmt() // stage 1, production 4
 {
-	// FIXME: Finish
+	string popOperatorStr, popOperand1, popOperand2;
+
+	if (isNonKeyId(token))
+	{
+		pushOperand(token);
+	}
+	nextToken();
+	
+	if (token != ":=")
+	{
+		processError("expected \":=\" for assignment statement");
+	}
+	pushOperand(token);
+	nextToken();
+	express();
+	nextToken();
+	
+	if (token != ";")
+	{
+		processError("semicolon expected");
+	}
+
+	popOperatorStr = popOperator();
+	popOperand1 = popOperand();
+	popOperand2 = popOperand();
+	code(popOperatorStr, popOperand1, popOperand2);
 }
 
 void Compiler::readStmt() // stage 1, production 5
@@ -1405,7 +1445,6 @@ string Compiler::popOperand() //pop name from operandStk
 }
 
 // ::
-
 
 
 
