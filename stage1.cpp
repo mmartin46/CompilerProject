@@ -1350,20 +1350,7 @@ void Compiler::factors() // stage 1, production 14
 void Compiler::part() // stage 1, production 15
 {
 	// FIXME: Finish
-	if (isBoolean(token))
-	{
-		// FIXME:
-		// VALID / NEXT PART
-		if (token == "true")
-		{
-			code("not", "true");
-		}
-		else
-		{
-			code("not", "false");
-		}		
-	}
-	else if ((token == "not"))
+	if ((token == "not"))
 	{
 		nextToken();
 		if (token == "(")
@@ -1382,7 +1369,7 @@ void Compiler::part() // stage 1, production 15
 			code("not", poppedOperand);
 			nextToken();
 		}
-		if (isBoolean(token))
+		else if (isBoolean(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART	
@@ -1395,7 +1382,7 @@ void Compiler::part() // stage 1, production 15
 				code("not", "false");
 			}
 		}
-		if (isNonKeyId(token))
+		else if (isNonKeyId(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART	
@@ -1414,27 +1401,31 @@ void Compiler::part() // stage 1, production 15
 		{
 			nextToken();
 			express();
-			nextToken();
 			if (token != ")")
 			{
 				processError("No matching closing parenthesis");
 			}
 			// FIXME:
 			// VALID / NEXT PART
+			nextToken();
 		}
-		if (isInteger(token))
+		else if (isInteger(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART
 			pushOperand(token);
 			nextToken();
 		}
-		if (isNonKeyId(token))
+		else if (isNonKeyId(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART
 			pushOperand(token);
 			nextToken();
+		}
+		else
+		{
+			processError("integer expected after after \"+\""); 
 		}
 	}
 	else if ((token == "-"))
@@ -1444,7 +1435,6 @@ void Compiler::part() // stage 1, production 15
 		{
 			nextToken();
 			express();
-			nextToken();
 			
 			if (token != ")")
 			{
@@ -1453,27 +1443,31 @@ void Compiler::part() // stage 1, production 15
 			// FIXME:
 			// VALID / NEXT PART
 			code("neg", popOperand());
+			nextToken();
 		}
-		if (isInteger(token))
+		else if (isLiteral(token) && isInteger(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART
 			pushOperand("-" + token);
 			nextToken();
 		}
-		if (isNonKeyId(token))
+		else if (isNonKeyId(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART
 			pushOperand("neg" + token);
 			nextToken();
 		}
+		else
+		{
+			processError("integer expected after after \"-\""); 
+		}
 	}
 	else if (token == "(")
 	{
 		nextToken();
 		express();
-		nextToken();
 		if (token != ")")
 		{
 			processError("No matching closing parenthesis");
@@ -1481,6 +1475,12 @@ void Compiler::part() // stage 1, production 15
 		// FIXME:
 		// VALID / NEXT PART
 		nextToken();
+	}
+	else if (isInteger(token) || isBoolean(token) || isNonKeyId(token))
+	{
+		// FIXME:
+		// VALID / NEXT PART
+		pushOperand(token);
 	}
 }
 
