@@ -1156,9 +1156,13 @@ void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) //
 
 void Compiler::execStmts() // stage 1, production 2
 {
-	// FIXME: Finish
-
+   while (token != "end")
+   {
+      execStmt();
+      nextToken();
+   }
 }
+
 
 void Compiler::execStmt() // stage 1, production 3
 {
@@ -1212,7 +1216,6 @@ void Compiler::assignStmt() // stage 1, production 4
 
 void Compiler::readStmt() // stage 1, production 5
 {
-	// FIXME: Finish
 	if (token != "read")
 	{
 		processError("keyword \"read\" expected");
@@ -1241,7 +1244,6 @@ void Compiler::readStmt() // stage 1, production 5
 
 void Compiler::writeStmt() // stage 1, production 7
 {
-	// FIXME: Finish
 	if (token != "write")
 	{
 		processError("keyword \"write\" expected");
@@ -1270,34 +1272,79 @@ void Compiler::writeStmt() // stage 1, production 7
 
 void Compiler::express() // stage 1, production 9
 {
-	// FIXME: Finish
 	term();
 	expresses();
 }
 
 void Compiler::expresses() // stage 1, production 10
 {
-	// FIXME: Finish
+	if ((token == "<>") || (token == "=") || (token == "<=") || 
+		(token == ">=") || (token == "<") || (token == ">"))
+	{
+		pushOperator(token);
+		nextToken();
+		term();
+		
+		string poppedOperator, poppedOperand1, poppedOperand2;
+		
+		poppedOperator = popOperator();
+		poppedOperand1 = popOperand();
+		poppedOperand2 = popOperand();
+		code(poppedOperator, poppedOperand1, poppedOperand2);
+		expresses();
+	}
 }
 
 void Compiler::term() // stage 1, production 11
 {
-	// FIXME: Finish
+	factor();
+   terms();
 }
 
 void Compiler::terms() // stage 1, production 12
 {
-	// FIXME: Finish
+   if (token == "+" || token == "-" || token == "or")
+   {
+      pushOperator(token);
+      
+      nextToken();
+      factor();
+      
+      string poppedOperator, poppedOperand1, poppedOperand2;
+      poppedOperator = popOperator();
+		poppedOperand1 = popOperand();
+		poppedOperand2 = popOperand();
+		
+      code(poppedOperator, poppedOperand1, poppedOperand2);
+      
+      terms();
+   }
 }
 
 void Compiler::factor() // stage 1, production 13
 {
-	// FIXME: Finish
+	part();
+	factors();
 }
 
 void Compiler::factors() // stage 1, production 14
 {
-	// FIXME: Finish
+   if (token == "*" || token == "div" || token == "mod" || token == "and")
+   {
+      pushOperator(token);
+
+		nextToken();
+		part();
+      string poppedOperator, poppedOperand1, poppedOperand2; 
+		
+		poppedOperator = popOperator();
+		poppedOperand1 = popOperand();
+		poppedOperand2 = popOperand();
+		
+      code(poppedOperator, poppedOperand1, poppedOperand2);
+      
+      factors();
+   }
 }
 
 void Compiler::part() // stage 1, production 15
@@ -1398,7 +1445,6 @@ void Compiler::part() // stage 1, production 15
 
 // ::
 
-
 void Compiler::freeTemp()
 {
     currentTempNo--;
@@ -1436,7 +1482,6 @@ bool Compiler::isTemporary(string s) const // determines if s represents a tempo
 }
 
 
-
 // Push and Pop
 void Compiler::pushOperator(string name) //push name onto operatorStk
 {
@@ -1468,8 +1513,6 @@ void Compiler::pushOperand(string name) //push name onto operandStk
   operandStk.push(name);
 }
 
-// ::
-
 string Compiler::popOperator() //pop name from operatorStk
 {
   if (!operatorStk.empty())
@@ -1495,6 +1538,3 @@ string Compiler::popOperand() //pop name from operandStk
 }
 
 // ::
-
-
-
