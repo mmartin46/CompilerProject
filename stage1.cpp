@@ -1349,7 +1349,6 @@ void Compiler::factors() // stage 1, production 14
 
 void Compiler::part() // stage 1, production 15
 {
-	// FIXME: Finish
 	if ((token == "not"))
 	{
 		nextToken();
@@ -1363,7 +1362,6 @@ void Compiler::part() // stage 1, production 15
 			{
 				processError("No matching closing parenthesis");
 			}
-			// FIXME:
 			// VALID / NEXT PART
 			string poppedOperand = popOperand();
 			code("not", poppedOperand);
@@ -1371,7 +1369,6 @@ void Compiler::part() // stage 1, production 15
 		}
 		else if (isBoolean(token))
 		{
-			// FIXME:
 			// VALID / NEXT PART	
 			if (token == "true")
 			{
@@ -1384,7 +1381,6 @@ void Compiler::part() // stage 1, production 15
 		}
 		else if (isNonKeyId(token))
 		{
-			// FIXME:
 			// VALID / NEXT PART	
 			code("not", token);
 			nextToken();
@@ -1405,20 +1401,17 @@ void Compiler::part() // stage 1, production 15
 			{
 				processError("No matching closing parenthesis");
 			}
-			// FIXME:
 			// VALID / NEXT PART
 			nextToken();
 		}
 		else if (isInteger(token))
 		{
-			// FIXME:
 			// VALID / NEXT PART
 			pushOperand(token);
 			nextToken();
 		}
 		else if (isNonKeyId(token))
 		{
-			// FIXME:
 			// VALID / NEXT PART
 			pushOperand(token);
 			nextToken();
@@ -1440,21 +1433,18 @@ void Compiler::part() // stage 1, production 15
 			{
 				processError("No matching closing parenthesis");
 			}
-			// FIXME:
 			// VALID / NEXT PART
 			code("neg", popOperand());
 			nextToken();
 		}
 		else if (isLiteral(token) && isInteger(token))
 		{
-			// FIXME:
 			// VALID / NEXT PART
 			pushOperand("-" + token);
 			nextToken();
 		}
 		else if (isNonKeyId(token))
 		{
-			// FIXME:
 			// VALID / NEXT PART
 			pushOperand("neg" + token);
 			nextToken();
