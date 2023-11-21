@@ -1213,16 +1213,66 @@ void Compiler::assignStmt() // stage 1, production 4
 void Compiler::readStmt() // stage 1, production 5
 {
 	// FIXME: Finish
+	if (token != "read")
+	{
+		processError("keyword \"read\" expected");
+	}
+	nextToken();
+	
+	if (token != "(")
+	{
+		processError("\"(\" expected (for read statements)");
+	}
+	
+	nextToken();
+	ids();
+	nextToken();
+	
+	if (token != ")")
+	{
+		processError("\")\" expected");
+	}
+	nextToken();
+	if (token != ";")
+	{
+		processError("semicolon expected");
+	}
 }
 
 void Compiler::writeStmt() // stage 1, production 7
 {
 	// FIXME: Finish
+	if (token != "write")
+	{
+		processError("keyword \"write\" expected");
+	}
+	nextToken();
+	
+	if (token != "(")
+	{
+		processError("\"(\" expected (for write statements)");
+	}
+	
+	nextToken();
+	ids();
+	nextToken();
+	
+	if (token != ")")
+	{
+		processError("\")\" expected");
+	}
+	nextToken();
+	if (token != ";")
+	{
+		processError("semicolon expected");
+	}
 }
 
 void Compiler::express() // stage 1, production 9
 {
 	// FIXME: Finish
+	term();
+	expresses();
 }
 
 void Compiler::expresses() // stage 1, production 10
