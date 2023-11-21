@@ -1356,11 +1356,10 @@ void Compiler::part() // stage 1, production 15
 		{
 			nextToken();
 			express();
-			nextToken();
 			
 			if (token != ")")
 			{
-				processError("No matching closing parenthesis");
+				processError("no matching closing parenthesis");
 			}
 			// VALID / NEXT PART
 			string poppedOperand = popOperand();
@@ -1378,6 +1377,7 @@ void Compiler::part() // stage 1, production 15
 			{
 				code("not", "false");
 			}
+			nextToken();
 		}
 		else if (isNonKeyId(token))
 		{
@@ -1399,7 +1399,7 @@ void Compiler::part() // stage 1, production 15
 			express();
 			if (token != ")")
 			{
-				processError("No matching closing parenthesis");
+				processError("no matching closing parenthesis");
 			}
 			// VALID / NEXT PART
 			nextToken();
@@ -1431,7 +1431,7 @@ void Compiler::part() // stage 1, production 15
 			
 			if (token != ")")
 			{
-				processError("No matching closing parenthesis");
+				processError("no matching closing parenthesis");
 			}
 			// VALID / NEXT PART
 			code("neg", popOperand());
@@ -1460,7 +1460,7 @@ void Compiler::part() // stage 1, production 15
 		express();
 		if (token != ")")
 		{
-			processError("No matching closing parenthesis");
+			processError("no matching closing parenthesis");
 		}
 		// FIXME:
 		// VALID / NEXT PART
