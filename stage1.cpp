@@ -1353,9 +1353,17 @@ void Compiler::part() // stage 1, production 15
 	if (isBoolean(token))
 	{
 		// FIXME:
-		// VALID / NEXT PART		
+		// VALID / NEXT PART
+		if (token == "true")
+		{
+			code("not", "true");
+		}
+		else
+		{
+			code("not", "false");
+		}		
 	}
-	if ((token == "not"))
+	else if ((token == "not"))
 	{
 		nextToken();
 		if (token == "(")
@@ -1370,19 +1378,36 @@ void Compiler::part() // stage 1, production 15
 			}
 			// FIXME:
 			// VALID / NEXT PART
+			string poppedOperand = popOperand();
+			code("not", poppedOperand);
+			nextToken();
 		}
 		if (isBoolean(token))
 		{
 			// FIXME:
-			// VALID / NEXT PART			
+			// VALID / NEXT PART	
+			if (token == "true")
+			{
+				code("not", "true");
+			}
+			else
+			{
+				code("not", "false");
+			}
 		}
 		if (isNonKeyId(token))
 		{
 			// FIXME:
-			// VALID / NEXT PART						
+			// VALID / NEXT PART	
+			code("not", token);
+			nextToken();
+		}
+		else
+		{
+			processError("non-keyword-identifier, boolean, or \"(\" expected after \"not\"");
 		}
 	}
-	if ((token == "+"))
+	else if ((token == "+"))
 	{
 		nextToken();
 		if (token == "(")
@@ -1401,14 +1426,18 @@ void Compiler::part() // stage 1, production 15
 		{
 			// FIXME:
 			// VALID / NEXT PART
+			pushOperand(token);
+			nextToken();
 		}
 		if (isNonKeyId(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART
+			pushOperand(token);
+			nextToken();
 		}
 	}
-	if ((token == "-"))
+	else if ((token == "-"))
 	{
 		nextToken();
 		if (token == "(")
@@ -1423,20 +1452,24 @@ void Compiler::part() // stage 1, production 15
 			}
 			// FIXME:
 			// VALID / NEXT PART
+			code("neg", popOperand());
 		}
 		if (isInteger(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART
+			pushOperand("-" + token);
+			nextToken();
 		}
 		if (isNonKeyId(token))
 		{
 			// FIXME:
 			// VALID / NEXT PART
+			pushOperand("neg" + token);
+			nextToken();
 		}
 	}
-	nextToken();
-	if (token == "(")
+	else if (token == "(")
 	{
 		nextToken();
 		express();
@@ -1447,6 +1480,7 @@ void Compiler::part() // stage 1, production 15
 		}
 		// FIXME:
 		// VALID / NEXT PART
+		nextToken();
 	}
 }
 
