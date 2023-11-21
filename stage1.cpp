@@ -1063,7 +1063,42 @@ string Compiler::ids() //token should be NON_KEY_ID
 
 void Compiler::emitReadCode(string operand1, string operand2)
 {
+	string name;
 	
+	string::iterator str_itr = operand1.begin();
+	
+	
+	while (str_itr < operand1.end())
+	{
+		// GRABBING EACH NAME.
+		name = "";
+		
+		// The CONTENTS of the ITERATOR
+		// *str_itr - contents (the actual variable)
+		// str_itr - iterator itself
+		
+		// 
+		while ((*str_itr != ',') && (str_itr < operand1.end()))
+		{
+			name += *str_itr;
+			++str_itr;	// Incrementing the iterator, not the contents.
+		}
+		name = name.substr(0, 15);
+		if (symbolTable.find(name) == symbolTable.end())
+		{
+			processError("reference to undefined symbol");
+		}
+		else if (whichType(name) != INTEGER)
+		{
+			processError("can't read variables of this type");
+		}
+		else if (symbolTable.at(name).getMode() != VARIABLE)
+		{
+			processError("attempting to read to a read-only location");
+		}
+		// FIXME:
+		// NOT FINISHED
+	}	
 }
 
 void Compiler::emitWriteCode(string operand1, string operand2)
@@ -1228,13 +1263,15 @@ void Compiler::readStmt() // stage 1, production 5
 	}
 	
 	nextToken();
-	ids();
+	string tempIDs = ids();
 	nextToken();
 	
 	if (token != ")")
 	{
 		processError("\")\" expected");
 	}
+	
+	code("read", tempIDs);
 	nextToken();
 	if (token != ";")
 	{
@@ -1255,19 +1292,22 @@ void Compiler::writeStmt() // stage 1, production 7
 		processError("\"(\" expected (for write statements)");
 	}
 	
+	// nextList
 	nextToken();
-	ids();
+	string tempIDs = ids();
 	nextToken();
 	
 	if (token != ")")
 	{
 		processError("\")\" expected");
 	}
+	
+	code("write", tempIDs);
 	nextToken();
 	if (token != ";")
 	{
 		processError("semicolon expected");
-	}
+	}	
 }
 
 void Compiler::express() // stage 1, production 9
@@ -1462,13 +1502,11 @@ void Compiler::part() // stage 1, production 15
 		{
 			processError("no matching closing parenthesis");
 		}
-		// FIXME:
 		// VALID / NEXT PART
 		nextToken();
 	}
 	else if (isInteger(token) || isBoolean(token) || isNonKeyId(token))
 	{
-		// FIXME:
 		// VALID / NEXT PART
 		pushOperand(token);
 	}
