@@ -1096,8 +1096,16 @@ void Compiler::emitReadCode(string operand1, string operand2)
 		{
 			processError("attempting to read to a read-only location");
 		}
-		// FIXME:
-		// NOT FINISHED
+		else
+		{
+			// FIXME:
+			// NOT FINISHED
+			emit("", "call", "ReadInt", "; read an integer");
+			string internalName = symbolTable.at(name).getInternalName();
+			emit("", "mov", "[" + internalName + "], eax", "; store at a");
+			contentsOfAReg = name;
+		}
+		//++str_itr;
 	}	
 }
 
