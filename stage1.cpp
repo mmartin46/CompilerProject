@@ -1350,14 +1350,20 @@ void Compiler::factors() // stage 1, production 14
 void Compiler::part() // stage 1, production 15
 {
 	// FIXME: Finish
+	if (isBoolean(token))
+	{
+		// FIXME:
+		// VALID / NEXT PART		
+	}
 	if ((token == "not"))
 	{
 		nextToken();
 		if (token == "(")
 		{
 			nextToken();
-			// FIXME:
-			// Write EXPRESSION
+			express();
+			nextToken();
+			
 			if (token != ")")
 			{
 				processError("No matching closing parenthesis");
@@ -1382,8 +1388,8 @@ void Compiler::part() // stage 1, production 15
 		if (token == "(")
 		{
 			nextToken();
-			// FIXME:
-			// Write EXPRESSION
+			express();
+			nextToken();
 			if (token != ")")
 			{
 				processError("No matching closing parenthesis");
@@ -1408,8 +1414,9 @@ void Compiler::part() // stage 1, production 15
 		if (token == "(")
 		{
 			nextToken();
-			// FIXME:
-			// Write EXPRESSION
+			express();
+			nextToken();
+			
 			if (token != ")")
 			{
 				processError("No matching closing parenthesis");
@@ -1432,8 +1439,8 @@ void Compiler::part() // stage 1, production 15
 	if (token == "(")
 	{
 		nextToken();
-		// FIXME:
-		// Write EXPRESSION
+		express();
+		nextToken();
 		if (token != ")")
 		{
 			processError("No matching closing parenthesis");
