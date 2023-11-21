@@ -1111,7 +1111,48 @@ void Compiler::emitReadCode(string operand1, string operand2)
 
 void Compiler::emitWriteCode(string operand1, string operand2)
 {
-	
+	// FIXME: NOT FINISHED
+	string name;
+	string::iterator str_itr = operand1.begin();
+
+	while (str_itr < operand1.end())
+	{
+		// GRABBING EACH NAME.
+		name = "";
+		
+		// The CONTENTS of the ITERATOR
+		// *str_itr - contents (the actual variable)
+		// str_itr - iterator itself
+		
+		// 
+		while ((*str_itr != ',') && (str_itr < operand1.end()))
+		{
+			name += *str_itr;
+			++str_itr;	// Incrementing the iterator, not the contents.
+		}
+		name = name.substr(0, 15);
+		if (symbolTable.find(name) == symbolTable.end())
+		{
+			processError("reference to undefined symbol");
+		}
+		// name is not in the A register.
+		else if (contentsOfAReg != name)
+		{
+			processError("can't read variables of this type");
+		}
+		else if ((symbolTable.at(name).getDataType() == INTEGER) ||
+				 (symbolTable.at(name).getDataType() == BOOLEAN))
+		{
+			// other case
+		}
+		else
+		{
+			// FIXME:
+			// NOT FINISHED
+			emit("", "call", "Crlf");
+		}
+		//++str_itr;
+	}
 }
 
 void Compiler::emitAssignCode(string operand1, string operand2)         // op2 = op1			
