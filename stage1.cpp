@@ -1100,9 +1100,9 @@ void Compiler::emitReadCode(string operand1, string operand2)
 		{
 			// FIXME:
 			// NOT FINISHED
-			emit("", "call", "ReadInt", "; read an integer");
+			emit("", "call", "ReadInt", "; read int; value placed in eax");
 			string internalName = symbolTable.at(name).getInternalName();
-			emit("", "mov", "[" + internalName + "], eax", "; store at a");
+			emit("", "mov", "[" + internalName + "], eax", "; store eax at a");
 			contentsOfAReg = name;
 		}
 		//++str_itr;
@@ -1140,6 +1140,7 @@ void Compiler::emitWriteCode(string operand1, string operand2)
 		{
 			processError("can't read variables of this type");
 		}
+		// Is the data type integer or boolean.
 		else if ((symbolTable.at(name).getDataType() == INTEGER) ||
 				 (symbolTable.at(name).getDataType() == BOOLEAN))
 		{
