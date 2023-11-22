@@ -862,11 +862,12 @@ void Compiler::beginEndStmt()
 	{
 		execStmts();
 	}
-	if (nextToken() != "end")
+	if (token != "end")
 	{
-		processError("keyword \"end\" expected");
+		processError("keyword \"end\" expected ->(" + (token) + ")");
 	}
-	if (nextToken() != ".")
+	nextToken();
+	if (token != ".")
 	{
 		processError("period expected");
 	}
