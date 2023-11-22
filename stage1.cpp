@@ -2372,7 +2372,6 @@ void Compiler::assignStmt() // stage 1, production 4
 	pushOperator(token);
 	nextToken();
 	express();
-	nextToken();
 	
 	if (token != ";")
 	{
