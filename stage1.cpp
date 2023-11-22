@@ -422,7 +422,7 @@ void Compiler::code(string op, string operand1, string operand2)
   }
   else if (op == "=")
   {
-		 emitEqualityCode(operand1, operand2);
+	 emitEqualityCode(operand1, operand2);
   }
   else if (op == ":=")
   {
@@ -1229,7 +1229,7 @@ void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +
 		(contentsOfAReg != operand2))
 	{
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax, [" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;		
 	}
 	string op1internalName = symbolTable.at(operand1).getInternalName();   
@@ -2721,7 +2721,7 @@ string Compiler::popOperator() //pop name from operatorStk
   if (!operatorStk.empty())
   {
 	string op = operatorStk.top();
-	operandStk.pop();
+	operatorStk.pop();
 	return op;
   }
   processError("compiler error; operator stack underflow");
