@@ -1084,30 +1084,34 @@ void Compiler::emitReadCode(string operand1, string operand2)
 		// str_itr - iterator itself
 		
 		// 
-		while ((*str_itr != ',') && (str_itr < operand1.end()))
+		while ((*str_itr != ',') && (str_itr != operand1.end()))
 		{
 			name += *str_itr;
 			++str_itr;	// Incrementing the iterator, not the contents.
 		}
 		name = name.substr(0, 15);
-		if (symbolTable.find(name) == symbolTable.end())
+		
+		if (name != "")
 		{
-			processError("reference to undefined symbol");
-		}
-		if (whichType(name) != INTEGER)
-		{
-			processError("can't read variables of this type");
-		}
-		if (symbolTable.at(name).getMode() != VARIABLE)
-		{
-			processError("attempting to read to a read-only location");
-		}
+			if (symbolTable.find(name) == symbolTable.end())
+			{
+				processError("reference to undefined symbol");
+			}
+			if (whichType(name) != INTEGER)
+			{
+				processError("can't read variables of this type");
+			}
+			if (symbolTable.at(name).getMode() != VARIABLE)
+			{
+				processError("attempting to read to a read-only location");
+			}
 
-		emit("", "call", "ReadInt", "; read int; value placed in eax");
-		string internalName = symbolTable.at(name).getInternalName();
-		emit("", "mov", "[" + internalName + "], eax", "; store eax at a");
-		contentsOfAReg = name;
-		//++str_itr;
+			emit("", "call", "ReadInt", "; read int; value placed in eax");
+			string internalName = symbolTable.at(name).getInternalName();
+			emit("", "mov", "[" + internalName + "], eax", "; store eax at a");
+			contentsOfAReg = name;
+		}
+		++str_itr;
 	}	
 }
 
@@ -1126,33 +1130,36 @@ void Compiler::emitWriteCode(string operand1, string operand2)
 		// str_itr - iterator itself
 		
 		// 
-		while ((*str_itr != ',') && (str_itr < operand1.end()))
+		while ((*str_itr != ',') && (str_itr != operand1.end()))
 		{
 			name += *str_itr;
 			++str_itr;	// Incrementing the iterator, not the contents.
 		}
-		name = name.substr(0, 15);
-		if (symbolTable.find(name) == symbolTable.end())
+		if (name != "")
 		{
-			processError("reference to undefined symbol");
-		}
-		// name is not in the A register.
-		if (contentsOfAReg != name)
-		{
-			string internalName = symbolTable.at(name).getInternalName();
-			emit("", "mov", "eax, [" + internalName + "]", "; load " + name + "in eax");
-			contentsOfAReg = name;
-		}
-		// Is the data type integer or boolean.
-		if ((symbolTable.at(name).getDataType() == INTEGER) ||
-				 (symbolTable.at(name).getDataType() == BOOLEAN))
-		{
-			// other case
-			emit("", "call", "WriteInt", "; write int in eax to standard out");
-		}
+			name = name.substr(0, 15);
+			if (symbolTable.find(name) == symbolTable.end())
+			{
+				processError("reference to undefined symbol");
+			}
+			// name is not in the A register.
+			if (contentsOfAReg != name)
+			{
+				string internalName = symbolTable.at(name).getInternalName();
+				emit("", "mov", "eax, [" + internalName + "]", "; load " + name + "in eax");
+				contentsOfAReg = name;
+			}
+			// Is the data type integer or boolean.
+			if ((symbolTable.at(name).getDataType() == INTEGER) ||
+					 (symbolTable.at(name).getDataType() == BOOLEAN))
+			{
+				// other case
+				emit("", "call", "WriteInt", "; write int in eax to standard out");
+			}
 
-		emit("", "call", "Crlf", "; write \r\n to standard out");
-		//++str_itr;
+			emit("", "call", "Crlf", "; write \\r\\n to standard out");
+		}
+		++str_itr;
 	}
 }
 
@@ -2361,7 +2368,7 @@ void Compiler::assignStmt() // stage 1, production 4
 	{
 		processError("expected \":=\" for assignment statement");
 	}
-	pushOperand(token);
+	pushOperator(token);
 	nextToken();
 	express();
 	nextToken();
@@ -2392,14 +2399,13 @@ void Compiler::readStmt() // stage 1, production 5
 	
 	nextToken();
 	string tempIDs = ids();
-	
 	if (token != ")")
 	{
 		processError("\")\" expected");
 	}
-	
 	code("read", tempIDs);
 	nextToken();
+	
 	if (token != ";")
 	{
 		processError("semicolon expected");
@@ -2635,6 +2641,7 @@ void Compiler::part() // stage 1, production 15
 	{
 		// VALID / NEXT PART
 		pushOperand(token);
+		nextToken();
 	}
 }
 
@@ -2686,7 +2693,7 @@ void Compiler::pushOperator(string name) //push name onto operatorStk
 
 void Compiler::pushOperand(string name) //push name onto operandStk
 {
-  bool valid_condition = (isLiteral(name) && symbolTable.count(name));
+  bool valid_condition = (isLiteral(name) && (symbolTable.count(name) == 0));
   if (valid_condition)
   {
   	if (name == "true")
@@ -2702,9 +2709,9 @@ void Compiler::pushOperand(string name) //push name onto operandStk
     	insert(name, whichType(name), CONSTANT, name, YES, 1);
     }
   }
-  else if (!valid_condition)
+  else
   {
-  	processError("reference to undefined symbol");
+  	processError("reference to undefined symbol -> (" + (name) + ")");
   }
   operandStk.push(name);
 }
