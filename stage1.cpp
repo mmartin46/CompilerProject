@@ -857,6 +857,12 @@ void Compiler::beginEndStmt()
 	{
 		processError("keyword \"begin\" expected");
 	}
+	
+	if (isNonKeyId(nextToken()) || (token == "read") || (token == "write"))
+	{
+		execStmts();
+	}
+	
 	if (nextToken() != "end")
 	{
 		processError("keyword \"end\" expected");
@@ -1107,7 +1113,6 @@ void Compiler::emitReadCode(string operand1, string operand2)
 
 void Compiler::emitWriteCode(string operand1, string operand2)
 {
-	// FIXME: NOT FINISHED
 	string name;
 	string::iterator str_itr = operand1.begin();
 
@@ -2387,7 +2392,6 @@ void Compiler::readStmt() // stage 1, production 5
 	
 	nextToken();
 	string tempIDs = ids();
-	nextToken();
 	
 	if (token != ")")
 	{
@@ -2418,7 +2422,6 @@ void Compiler::writeStmt() // stage 1, production 7
 	// nextList
 	nextToken();
 	string tempIDs = ids();
-	nextToken();
 	
 	if (token != ")")
 	{
@@ -2664,7 +2667,6 @@ string Compiler::getTemp()
 
 string Compiler::getLabel()
 {
-	// FIXME: Finish
 	static int labelNumber = 0;
 	string labelName = ".L" + to_string(labelNumber++);
 	return labelName;
