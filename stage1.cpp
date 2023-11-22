@@ -1266,30 +1266,19 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
-	if (!isTemporary(contentsOfAReg) &&
-		(contentsOfAReg != operand1) &&
-		(contentsOfAReg != operand2))
-	{
-		contentsOfAReg = "";
-	}
 	if ((contentsOfAReg != operand2))
 	{
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax, [" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;		
 	}
 	string op1internalName = symbolTable.at(operand1).getInternalName();   
 	string op2internalName = symbolTable.at(operand2).getInternalName(); 
 	
 	// emit code to perform register-memory subtraction
-	if (operand1 != contentsOfAReg)
-	{
-		emit("", "sub", "eax, [" + op1internalName + "]", "; AReg = " + operand2 + " + " + operand1);
-	}
-	else
-	{
-		emit("", "sub", "eax, [" + op2internalName + "]", "; AReg = " + operand1 + " + " + operand2);
-	}
+
+	emit("", "sub", "eax, [" + op1internalName + "]", "; AReg = " + operand2 + " + " + operand1);
+
 	
 	// deassign all temporaries involved in the addition and free those names for reuse
 	if (isTemporary(operand1))
@@ -1308,8 +1297,6 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 	contentsOfAReg = getTemp();
 	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
 	pushOperand(contentsOfAReg);
-}
-
 }
 
 void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *  op1			
