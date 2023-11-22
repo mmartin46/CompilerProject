@@ -1576,7 +1576,7 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 
 void Compiler::emitAndCode(string operand1, string operand2)            // op2 && op1			
 {
-	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2)))
+	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
 	{
 		processError("illegal type");
 	}
@@ -1643,7 +1643,7 @@ void Compiler::emitAndCode(string operand1, string operand2)            // op2 &
 
 void Compiler::emitOrCode(string operand1, string operand2)             // op2 || op1			
 {
-	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2)))
+	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
 	{
 		processError("illegal type");
 	}
@@ -1710,7 +1710,7 @@ void Compiler::emitOrCode(string operand1, string operand2)             // op2 |
 
 void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 == op1			
 {
-	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2)))
+	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
 	{
 		processError("incompatible types");
 	}
@@ -1757,7 +1757,24 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 	{
 		emit("", "cmp", "eax, [" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
 	}
-	// FIXME: Implement getLabel() first
+
+	//  emit code to jump if equal to the next available Ln (call getLabel)
+	emit("", "je", getLabel(), "; if " + operand1 + " = " + operand2 + " then jump to set eax to TRUE");
+	
+	//  emit code to load FALSE into the A register
+	emit("", "mov", "eax, [FALSE]", "; else set eax to FALSE");
+	
+	//  insert FALSE in symbol table with value 0 and external name false
+	if (symbolTable.find("false") == symbolTable.end())
+	{
+		symbolTable.insert({"false", SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, "0", YES, 1)}); 
+	}
+	
+	//  emit code to perform an unconditional jump to the next label (call getLabel should be L(n+1))
+	emit("", "jmp", getLabel(), "; unconditionally jump");
+
+    // emit code to label the next instruction with the first acquired label Ln 
+	
 }
 
 void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 != op1			
@@ -2144,7 +2161,7 @@ string Compiler::getLabel()
 	// FIXME: Finish
 	static int labelNumber = 0;
 	string labelName = ".L" + to_string(labelNumber++);
-	return labelName;	
+	return labelName;
 }
 
 bool Compiler::isTemporary(string s) const // determines if s represents a temporary
