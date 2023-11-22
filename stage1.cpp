@@ -2010,17 +2010,302 @@ void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <
 
 void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op2 <= op1		
 {
+	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
+	{
+		processError("incompatible types");
+	}
+	if (isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for the temp in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	//  if the A register holds a non-temp not operand2 nor operand1 then deassign it
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
+	if ((contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		// load operand2 into a
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;	
+	}
 	
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	string op2internalName = symbolTable.at(operand2).getInternalName(); 
+	string label1 = getLabel();
+	string label2 = getLabel();
+		
+	// emit code to perform a register-memory compare
+	
+	if (contentsOfAReg == operand1)
+	{
+		emit("", "cmp", "eax, [" + op2internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+	else
+	{
+		emit("", "cmp", "eax, [" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+
+	//  emit code to jump if equal to the next available Ln (call getLabel)
+	emit("", "jle", label1, "; if " + operand1 + " <= " + operand2 + " then jump to set eax to TRUE");
+	
+	//  emit code to load FALSE into the A register
+	emit("", "mov", "eax, [FALSE]", "; else set eax to FALSE");
+	
+	//  insert FALSE in symbol table with value 0 and external name false
+	if (symbolTable.find("false") == symbolTable.end())
+	{
+		symbolTable.insert({"false", SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, "0", YES, 1)}); 
+	}
+	
+	
+	//  emit code to perform an unconditional jump to the next label (call getLabel should be L(n+1))
+	emit("", "jmp", label2, "; unconditionally jump");
+
+    // emit code to label the next instruction with the first acquired label Ln 
+	emit(label1 + ":", "", "", "");
+	
+	//  emit code to load TRUE into the A register
+	emit("", "mov", "eax, [TRUE]", "; set eax to TRUE");
+
+	//  insert TRUE in symbol table with value -1 and external name true
+	if (symbolTable.find("true") == symbolTable.end())
+	{
+		symbolTable.insert({"true", SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, "-1", YES, 1)}); 
+	}
+	
+	//  emit code to label the next instruction with the second acquired label L(n+1)
+	emit(label2 + ":", "", "", "");
+	
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
+	if (isTemporary(operand2))
+	{
+		freeTemp();
+	}
+	
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(BOOLEAN);
+	pushOperand(contentsOfAReg);	
 }
 
 void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >  op1			
 {
+	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
+	{
+		processError("incompatible types");
+	}
+	if (isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for the temp in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+
+	if ((contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		// load operand2 into a
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;	
+	}
 	
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	string op2internalName = symbolTable.at(operand2).getInternalName(); 
+	string label1 = getLabel();
+	string label2 = getLabel();
+		
+	// emit code to perform a register-memory compare
+	
+	if (contentsOfAReg == operand1)
+	{
+		emit("", "cmp", "eax, [" + op2internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+	else
+	{
+		emit("", "cmp", "eax, [" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+
+	//  emit code to jump if equal to the next available Ln (call getLabel)
+	emit("", "jg", label1, "; if " + operand1 + " > " + operand2 + " then jump to set eax to TRUE");
+	
+	//  emit code to load FALSE into the A register
+	emit("", "mov", "eax, [FALSE]", "; else set eax to FALSE");
+	
+	//  insert FALSE in symbol table with value 0 and external name false
+	if (symbolTable.find("false") == symbolTable.end())
+	{
+		symbolTable.insert({"false", SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, "0", YES, 1)}); 
+	}
+	
+	
+	//  emit code to perform an unconditional jump to the next label (call getLabel should be L(n+1))
+	emit("", "jmp", label2, "; unconditionally jump");
+
+    // emit code to label the next instruction with the first acquired label Ln 
+	emit(label1 + ":", "", "", "");
+	
+	//  emit code to load TRUE into the A register
+	emit("", "mov", "eax, [TRUE]", "; set eax to TRUE");
+
+	//  insert TRUE in symbol table with value -1 and external name true
+	if (symbolTable.find("true") == symbolTable.end())
+	{
+		symbolTable.insert({"true", SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, "-1", YES, 1)}); 
+	}
+	
+	//  emit code to label the next instruction with the second acquired label L(n+1)
+	emit(label2 + ":", "", "", "");
+	
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
+	if (isTemporary(operand2))
+	{
+		freeTemp();
+	}
+	
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(BOOLEAN);
+	pushOperand(contentsOfAReg);		
 }
 
 void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) // op2 >= op1		
 {
+	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
+	{
+		processError("incompatible types");
+	}
+	if (isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for the temp in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	//  if the A register holds a non-temp not operand2 nor operand1 then deassign it
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
+	if ((contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		// load operand2 into a
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;	
+	}
 	
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	string op2internalName = symbolTable.at(operand2).getInternalName(); 
+	string label1 = getLabel();
+	string label2 = getLabel();
+		
+	// emit code to perform a register-memory compare
+	
+	if (contentsOfAReg == operand1)
+	{
+		emit("", "cmp", "eax, [" + op2internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+	else
+	{
+		emit("", "cmp", "eax, [" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+
+	//  emit code to jump if equal to the next available Ln (call getLabel)
+	emit("", "jge", label1, "; if " + operand1 + " >= " + operand2 + " then jump to set eax to TRUE");
+	
+	//  emit code to load FALSE into the A register
+	emit("", "mov", "eax, [FALSE]", "; else set eax to FALSE");
+	
+	//  insert FALSE in symbol table with value 0 and external name false
+	if (symbolTable.find("false") == symbolTable.end())
+	{
+		symbolTable.insert({"false", SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, "0", YES, 1)}); 
+	}
+	
+	
+	//  emit code to perform an unconditional jump to the next label (call getLabel should be L(n+1))
+	emit("", "jmp", label2, "; unconditionally jump");
+
+    // emit code to label the next instruction with the first acquired label Ln 
+	emit(label1 + ":", "", "", "");
+	
+	//  emit code to load TRUE into the A register
+	emit("", "mov", "eax, [TRUE]", "; set eax to TRUE");
+
+	//  insert TRUE in symbol table with value -1 and external name true
+	if (symbolTable.find("true") == symbolTable.end())
+	{
+		symbolTable.insert({"true", SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, "-1", YES, 1)}); 
+	}
+	
+	//  emit code to label the next instruction with the second acquired label L(n+1)
+	emit(label2 + ":", "", "", "");
+	
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
+	if (isTemporary(operand2))
+	{
+		freeTemp();
+	}
+	
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(BOOLEAN);
+	pushOperand(contentsOfAReg);	
 }
 
 
