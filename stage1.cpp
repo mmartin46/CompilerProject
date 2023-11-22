@@ -1194,7 +1194,7 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 }
 void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +  op1			
 {
-	if (!isInteger(operand1) && !isInteger(operand2))
+	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
 	{
 		processError("illegal type");
 	}
@@ -1254,7 +1254,9 @@ void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +
 
 void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -  op1			
 {
-	if (!isInteger(operand1) && !isInteger(operand2))
+	// Look at test case 147.asm
+	
+	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
 	{
 		processError("illegal type");
 	}
@@ -1301,7 +1303,7 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 
 void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *  op1			
 {
-	if (!isInteger(operand1) && !isInteger(operand2))
+	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
 	{
 		processError("illegal type");
 	}
@@ -1361,7 +1363,10 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 
 void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /  op1			
 {
-	
+	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
+	{
+		processError("illegal type");
+	}
 }
 
 void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %  op1			
@@ -1571,7 +1576,7 @@ void Compiler::expresses() // stage 1, production 10
 
 void Compiler::term() // stage 1, production 11
 {
-	factor();
+   factor();
    terms();
 }
 
