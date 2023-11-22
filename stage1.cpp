@@ -1146,7 +1146,7 @@ void Compiler::emitWriteCode(string operand1, string operand2)
 			if (contentsOfAReg != name)
 			{
 				string internalName = symbolTable.at(name).getInternalName();
-				emit("", "mov", "eax, [" + internalName + "]", "; load " + name + "in eax");
+				emit("", "mov", "eax, [" + internalName + "]", "; load " + name + " in eax");
 				contentsOfAReg = name;
 			}
 			// Is the data type integer or boolean.
@@ -2358,6 +2358,7 @@ void Compiler::assignStmt() // stage 1, production 4
 {
 	string popOperatorStr, popOperand1, popOperand2;
 
+	// THE BUG IS WITHIN PUSHOPERAND 101.dat
 	if (isNonKeyId(token))
 	{
 		pushOperand(token);
@@ -2693,6 +2694,8 @@ void Compiler::pushOperator(string name) //push name onto operatorStk
 
 void Compiler::pushOperand(string name) //push name onto operandStk
 {
+
+	
   bool valid_condition = (isLiteral(name) && (symbolTable.count(name) == 0));
   if (valid_condition)
   {
@@ -2709,10 +2712,7 @@ void Compiler::pushOperand(string name) //push name onto operandStk
     	insert(name, whichType(name), CONSTANT, name, YES, 1);
     }
   }
-  else
-  {
-  	processError("reference to undefined symbol -> (" + (name) + ")");
-  }
+
   operandStk.push(name);
 }
 
