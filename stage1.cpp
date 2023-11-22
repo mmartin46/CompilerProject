@@ -1221,7 +1221,7 @@ void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +
 		contentsOfAReg = operand2;		
 	}
 	string op1internalName = symbolTable.at(operand1).getInternalName();   
-	string op2internalName = symbolTable.at(operand2).genInternalName(); 
+	string op2internalName = symbolTable.at(operand2).getInternalName(); 
 	
 	// emit code to perform register-memory addition
 	if (operand1 != contentsOfAReg)
@@ -1286,16 +1286,16 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 		contentsOfAReg = operand2;		
 	}
 	string op1internalName = symbolTable.at(operand1).getInternalName();   
-	string op2internalName = symbolTable.at(operand2).genInternalName(); 
+	string op2internalName = symbolTable.at(operand2).getInternalName(); 
 	
 	// emit code to perform register-memory multiplication
 	if (operand1 != contentsOfAReg)
 	{
-		emit("", "imul", "eax [" + op1internalName + "]", "AReg = " + operand2 + " * " + operand1);
+		emit("", "imul", "dword [" + op1internalName + "]", "AReg = " + operand2 + " * " + operand1);
 	}
 	else
 	{
-		emit("", "imul", "eax [" + op2internalName + "]", "AReg = " + operand1 + " * " + operand2);
+		emit("", "imul", "dword [" + op2internalName + "]", "AReg = " + operand1 + " * " + operand2);
 	}
 	
 	// deassign all temporaries involved in the addition and free those names for reuse
