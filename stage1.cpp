@@ -1186,6 +1186,7 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 	contentsOfAReg = operand2;
 
 	// if operand1 is a temp then free its name for reuse
+	// operand2 can never be a temporary since it is to the left of ':='
 	if (isTemporary(operand1))
 	{
 		freeTemp();
@@ -1193,7 +1194,62 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 }
 void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +  op1			
 {
+	if (!isInteger(operand1) && !isInteger(operand2))
+	{
+		processError("illegal type");
+	}
+	if (isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
+	if ((contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;		
+	}
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	string op2internalName = symbolTable.at(operand2).genInternalName(); 
 	
+	// emit code to perform register-memory addition
+	if (operand1 != contentsOfAReg)
+	{
+		emit("", "add", "eax [" + op1internalName + "]", "AReg = " + operand2 + " + " + operand1);
+	}
+	else
+	{
+		emit("", "add", "eax [" + op2internalName + "]", "AReg = " + operand1 + " + " + operand2);
+	}
+	
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
+	if (isTemporary(operand2))
+	{
+		freeTemp();
+	}
+
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
+	pushOperand(contentsOfAReg);
 }
 
 void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -  op1			
@@ -1203,7 +1259,62 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 
 void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *  op1			
 {
+	if (!isInteger(operand1) && !isInteger(operand2))
+	{
+		processError("illegal type");
+	}
+	if (isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
+	if ((contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;		
+	}
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	string op2internalName = symbolTable.at(operand2).genInternalName(); 
 	
+	// emit code to perform register-memory multiplication
+	if (operand1 != contentsOfAReg)
+	{
+		emit("", "imul", "eax [" + op1internalName + "]", "AReg = " + operand2 + " * " + operand1);
+	}
+	else
+	{
+		emit("", "imul", "eax [" + op2internalName + "]", "AReg = " + operand1 + " * " + operand2);
+	}
+	
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
+	if (isTemporary(operand2))
+	{
+		freeTemp();
+	}
+
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
+	pushOperand(contentsOfAReg);
 }
 
 void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /  op1			
