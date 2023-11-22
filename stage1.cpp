@@ -1472,12 +1472,106 @@ void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %
 
 void Compiler::emitNegationCode(string operand1, string operand2)           // -op1					
 {
+	if ((whichType(operand1) != INTEGER))
+	{
+		processError("illegal type");
+	}
+	// if the a reg is a temp store it in memory
+	if (isTemporary(contentsOfAReg) && (operand1 != contentsOfAReg))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for it in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	// If the a register is a non-temp and not operand1
+	if (!isTemporary(contentsOfAReg) && (operand1 != contentsOfAReg))
+	{
+		contentsOfAReg = "";
+	}
+	// If operand1 isn't in the a register
+	// move it in so it can be negated.
+	if (contentsOfAReg != operand1)
+	{
+		// load operand1 into the a register.
+		string internalName = symbolTable.at(operand1).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand1 + "in eax");
+		contentsOfAReg = operand1;	
+	}
+
+	// emit code to perform a register-memory negatation
+	emit("", "neg", "eax", "; AReg = -AReg");
+
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
 	
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
+	pushOperand(contentsOfAReg);
 }
 
 void Compiler::emitNotCode(string operand1, string operand2)                // !op1
 {
+	if ((whichType(operand1) != BOOLEAN))
+	{
+		processError("illegal type");
+	}
+	// if the a reg is a temp store it in memory
+	if (isTemporary(contentsOfAReg) && (operand1 != contentsOfAReg))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for it in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	// If the a register is a non-temp and not operand1
+	if (!isTemporary(contentsOfAReg) && (operand1 != contentsOfAReg))
+	{
+		contentsOfAReg = "";
+	}
+	// If operand1 isn't in the a register
+	// move it in so it can be negated.
+	if (contentsOfAReg != operand1)
+	{
+		// load operand1 into the a register.
+		string internalName = symbolTable.at(operand1).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand1 + "in eax");
+		contentsOfAReg = operand1;	
+	}
+
+	// emit code to perform a register-memory negatation
+	emit("", "not", "eax", "; AReg = !AReg");
+
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
 	
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
+	pushOperand(contentsOfAReg);
 }
 
 void Compiler::emitAndCode(string operand1, string operand2)            // op2 && op1			
