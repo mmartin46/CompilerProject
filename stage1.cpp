@@ -1145,6 +1145,7 @@ void Compiler::emitWriteCode(string operand1, string operand2)
 				 (symbolTable.at(name).getDataType() == BOOLEAN))
 		{
 			// other case
+			emit("", "call", "WriteInt");
 		}
 		else
 		{
