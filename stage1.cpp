@@ -1088,23 +1088,19 @@ void Compiler::emitReadCode(string operand1, string operand2)
 		{
 			processError("reference to undefined symbol");
 		}
-		else if (whichType(name) != INTEGER)
+		if (whichType(name) != INTEGER)
 		{
 			processError("can't read variables of this type");
 		}
-		else if (symbolTable.at(name).getMode() != VARIABLE)
+		if (symbolTable.at(name).getMode() != VARIABLE)
 		{
 			processError("attempting to read to a read-only location");
 		}
-		else
-		{
-			// FIXME:
-			// NOT FINISHED
-			emit("", "call", "ReadInt", "; read int; value placed in eax");
-			string internalName = symbolTable.at(name).getInternalName();
-			emit("", "mov", "[" + internalName + "], eax", "; store eax at a");
-			contentsOfAReg = name;
-		}
+
+		emit("", "call", "ReadInt", "; read int; value placed in eax");
+		string internalName = symbolTable.at(name).getInternalName();
+		emit("", "mov", "[" + internalName + "], eax", "; store eax at a");
+		contentsOfAReg = name;
 		//++str_itr;
 	}	
 }
@@ -1136,30 +1132,64 @@ void Compiler::emitWriteCode(string operand1, string operand2)
 			processError("reference to undefined symbol");
 		}
 		// name is not in the A register.
-		else if (contentsOfAReg != name)
+		if (contentsOfAReg != name)
 		{
-			processError("can't read variables of this type");
+			string internalName = symbolTable.at(name).getInternalName();
+			emit("", "mov", "eax, [" + internalName + "]", "; load " + name + "in eax");
+			contentsOfAReg = name;
 		}
 		// Is the data type integer or boolean.
-		else if ((symbolTable.at(name).getDataType() == INTEGER) ||
+		if ((symbolTable.at(name).getDataType() == INTEGER) ||
 				 (symbolTable.at(name).getDataType() == BOOLEAN))
 		{
 			// other case
-			emit("", "call", "WriteInt");
+			emit("", "call", "WriteInt", "; write int in eax to standard out");
 		}
-		else
-		{
-			// FIXME:
-			// NOT FINISHED
-			emit("", "call", "Crlf");
-		}
+
+		emit("", "call", "Crlf", "; write \r\n to standard out");
 		//++str_itr;
 	}
 }
 
+// Page 19
 void Compiler::emitAssignCode(string operand1, string operand2)         // op2 = op1			
 {
-	
+	// if types of operands are not the same
+	if (whichType(operand1) != whichType(operand2))
+	{
+		processError("incompatible types");
+	}
+	// if storage mode of operand2 is not VARIABLE
+	if (symbolTable.at(operand2).getMode() != VARIABLE)
+	{
+		processError("symbol on left-hand side of assignment must have a storage mode of VARIABLE");
+	}
+	if (operand1 == operand2)
+	{
+		return;
+	}
+	if (contentsOfAReg != operand1)
+	{
+		string internalName = symbolTable.at(operand1).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand1 + "in eax");
+		contentsOfAReg = operand1;
+	}
+
+	/*
+	emit code to store the contents of that register into the memory location pointed to by
+	operand2
+	set the contentsOfAReg = operand2
+	*/
+	string op1internalName = symbolTable.at(operand1).getInternalName();
+	string op2internalName = symbolTable.at(operand2).getInternalName();
+	emit("", "mov", "[" + op2internalName + "], eax", operand2 + " = AReg");
+	contentsOfAReg = operand2;
+
+	// if operand1 is a temp then free its name for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
 }
 void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +  op1			
 {
