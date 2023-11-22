@@ -1637,18 +1637,127 @@ void Compiler::emitAndCode(string operand1, string operand2)            // op2 &
 	push the name of the result onto operandStk
 	*/
 	contentsOfAReg = getTemp();
-	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
+	symbolTable.at(contentsOfAReg).setDataType(BOOLEAN);
 	pushOperand(contentsOfAReg);
 }
 
 void Compiler::emitOrCode(string operand1, string operand2)             // op2 || op1			
 {
+	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2)))
+	{
+		processError("illegal type");
+	}
+	if (isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for the temp in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
+	if ((contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		// load operand2 into a
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;	
+	}
 	
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	string op2internalName = symbolTable.at(operand2).getInternalName(); 
+	
+	// emit code to perform a register-memory or
+	if (contentsOfAReg != operand1)
+	{
+		emit("", "or", "eax, [" + op1internalName + "]", "; AReg = " + operand2 + " or " + operand1);
+	}
+	else
+	{
+		emit("", "or", "eax, [" + op2internalName + "]", "; AReg = " + operand1 + " or " + operand2);
+	}
+	
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
+	if (isTemporary(operand2))
+	{
+		freeTemp();
+	}
+	
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(BOOLEAN);
+	pushOperand(contentsOfAReg);	
 }
 
 void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 == op1			
 {
+	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2)))
+	{
+		processError("incompatible types");
+	}
+	if (isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for the temp in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	//  if the A register holds a non-temp not operand2 nor operand1 then deassign it
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
+	if ((contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		// load operand2 into a
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;	
+	}
 	
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	string op2internalName = symbolTable.at(operand2).getInternalName(); 
+		
+	// emit code to perform a register-memory compare
+	
+	if (contentsOfAReg == operand1)
+	{
+		emit("", "cmp", "eax, [" + op2internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+	else
+	{
+		emit("", "cmp", "eax, [" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+	}
+	// FIXME: Implement getLabel() first
 }
 
 void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 != op1			
