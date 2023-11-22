@@ -1417,7 +1417,57 @@ void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /
 
 void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %  op1			
 {
-	
+	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
+	{
+		processError("illegal type");
+	}
+	if (isTemporary(contentsOfAReg) && (operand2 != contentsOfAReg))
+	{
+		/*
+		emit code to store that temp into memory
+		change the allocate entry for it in the symbol table to yes
+		deassign it
+		*/
+		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
+		emit("", "mov", "[" +  tempAInternalName + "], eax", "; " + contentsOfAReg + " = AReg");
+		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	if (!isTemporary(contentsOfAReg) && (operand2 != contentsOfAReg))
+	{
+		contentsOfAReg = "";
+	}
+	if (contentsOfAReg != operand2)
+	{
+		// load operand2 into the a register.
+		string internalName = symbolTable.at(operand2).getInternalName();
+		emit("", "mov", "eax, [" + internalName + "]", "; load " + operand2 + "in eax");
+		contentsOfAReg = operand2;	
+	}
+	string op1internalName = symbolTable.at(operand1).getInternalName();   
+	//  emit code to extend sign of dividend from the A register to edx:eax
+	emit("", "cdq", "", "; sign extend dividend from eax to edx:eax");
+	// emit code to perform a register-memory division
+	emit("", "idiv", "dword [" + op1internalName + "]", "; AReg = " + operand1 + "div a");
+	emit("", "xchg", "eax,edx", "exchange quotient and remainder");
+
+	// deassign all temporaries involved in the addition and free those names for reuse
+	if (isTemporary(operand1))
+	{
+		freeTemp();
+	}
+	if (isTemporary(operand2))
+	{
+		freeTemp();
+	}
+
+	/*
+	A Register = next available temporary name and change type of its symbol table entry to integer
+	push the name of the result onto operandStk
+	*/
+	contentsOfAReg = getTemp();
+	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
+	pushOperand(contentsOfAReg);
 }
 
 void Compiler::emitNegationCode(string operand1, string operand2)           // -op1					
