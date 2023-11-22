@@ -1183,7 +1183,7 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 	if (contentsOfAReg != operand1)
 	{
 		string internalName = symbolTable.at(operand1).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand1 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand1 + " in eax");
 		contentsOfAReg = operand1;
 	}
 
@@ -1291,7 +1291,7 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 	
 	// emit code to perform register-memory subtraction
 
-	emit("", "sub", "eax,[" + op1internalName + "]", "; AReg = " + operand2 + " + " + operand1);
+	emit("", "sub", "eax,[" + op1internalName + "]", "; AReg = " + operand2 + " - " + operand1);
 
 	
 	// deassign all temporaries involved in the addition and free those names for reuse
@@ -1347,11 +1347,11 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 	// emit code to perform register-memory multiplication
 	if (operand1 != contentsOfAReg)
 	{
-		emit("", "imul", "dword[" + op1internalName + "]", "; AReg = " + operand2 + " * " + operand1);
+		emit("", "imul", "dword [" + op1internalName + "]", "; AReg = " + operand2 + " * " + operand1);
 	}
 	else
 	{
-		emit("", "imul", "dword[" + op2internalName + "]", "; AReg = " + operand1 + " * " + operand2);
+		emit("", "imul", "dword [" + op2internalName + "]", "; AReg = " + operand1 + " * " + operand2);
 	}
 	
 	// deassign all temporaries involved in the addition and free those names for reuse
@@ -1399,14 +1399,14 @@ void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /
 	{
 		// load operand2 into the a register.
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	string op1internalName = symbolTable.at(operand1).getInternalName();   
 	//  emit code to extend sign of dividend from the A register to edx:eax
 	emit("", "cdq", "", "; sign extend dividend from eax to edx:eax");
 	// emit code to perform a register-memory division
-	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand1 + "div a");
+	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand1 + " div a");
 
 	// deassign all temporaries involved in the addition and free those names for reuse
 	if (isTemporary(operand1))
@@ -1460,7 +1460,7 @@ void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %
 	//  emit code to extend sign of dividend from the A register to edx:eax
 	emit("", "cdq", "", "; sign extend dividend from eax to edx:eax");
 	// emit code to perform a register-memory division
-	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand1 + "div a");
+	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand1 + " div a");
 	emit("", "xchg", "eax,edx", "exchange quotient and remainder");
 
 	// deassign all temporaries involved in the addition and free those names for reuse
