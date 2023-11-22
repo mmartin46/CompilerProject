@@ -2142,7 +2142,9 @@ string Compiler::getTemp()
 string Compiler::getLabel()
 {
 	// FIXME: Finish
-	return "";	
+	static int labelNumber = 0;
+	string labelName = ".L" + to_string(labelNumber++);
+	return labelName;	
 }
 
 bool Compiler::isTemporary(string s) const // determines if s represents a temporary
