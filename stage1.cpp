@@ -1108,7 +1108,7 @@ void Compiler::emitReadCode(string operand1, string operand2)
 
 			emit("", "call", "ReadInt", "; read int; value placed in eax");
 			string internalName = symbolTable.at(name).getInternalName();
-			emit("", "mov", "[" + internalName + "],eax", "; store eax at a");
+			emit("", "mov", "[" + internalName + "],eax", "; store eax at " + (name));
 			contentsOfAReg = name;
 		}
 		++str_itr;
@@ -1461,7 +1461,7 @@ void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %
 	emit("", "cdq", "", "; sign extend dividend from eax to edx:eax");
 	// emit code to perform a register-memory division
 	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand1 + " div a");
-	emit("", "xchg", "eax,edx", "exchange quotient and remainder");
+	emit("", "xchg", "eax,edx", "; exchange quotient and remainder");
 
 	// deassign all temporaries involved in the addition and free those names for reuse
 	if (isTemporary(operand1))
