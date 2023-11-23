@@ -328,7 +328,7 @@ storeTypes Compiler::whichType(string name) //tells which data type a name has
     {
 		if (isNonKeyId(name))
 		{
-			processError("reference to undefined constant");
+			processError("reference to undefined constant " + (name));
 		}
 		else
 		{
@@ -359,7 +359,7 @@ string Compiler::whichValue(string name) //tells which value a name has
 		}
     	else
     	{
-			processError("reference to undefined constant" );
+			processError("reference to undefined constant");
     	}
   	}
 	return value;
@@ -2618,7 +2618,7 @@ void Compiler::part() // stage 1, production 15
 		else if (isNonKeyId(token))
 		{
 			// VALID / NEXT PART
-			pushOperand("neg" + token);
+			code("neg", token);
 			nextToken();
 		}
 		else
