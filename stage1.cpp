@@ -1206,6 +1206,7 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 }
 void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +  op1			
 {
+	// if type of either operand is not integer
 	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
 		processError("binary '+' requires integer operands");
@@ -1214,17 +1215,24 @@ void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +
 		(contentsOfAReg != operand1) &&
 		(contentsOfAReg != operand2))
 	{
+		/*
+		emit code to store that temp into memory
+		 change the allocate entry for the temp in the symbol table to yes
+		 deassign it
+		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
+	// if the A register holds a non-temp not operand1 nor operand2 then deassign it
 	if (!isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
 		(contentsOfAReg != operand2))
 	{
 		contentsOfAReg = "";
 	}
+	//  if neither operand is in the A register then
 	if ((contentsOfAReg != operand1) &&
 		(contentsOfAReg != operand2))
 	{
