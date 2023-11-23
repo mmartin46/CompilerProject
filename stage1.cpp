@@ -1338,7 +1338,7 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 		(contentsOfAReg != operand2))
 	{
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;		
 	}
 	string op1internalName = symbolTable.at(operand1).getInternalName();   
@@ -1406,7 +1406,7 @@ void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /
 	//  emit code to extend sign of dividend from the A register to edx:eax
 	emit("", "cdq", "", "; sign extend dividend from eax to edx:eax");
 	// emit code to perform a register-memory division
-	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand1 + " div a");
+	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand2 + " div " + operand1);
 
 	// deassign all temporaries involved in the addition and free those names for reuse
 	if (isTemporary(operand1))
@@ -1453,14 +1453,14 @@ void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %
 	{
 		// load operand2 into the a register.
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	string op1internalName = symbolTable.at(operand1).getInternalName();   
 	//  emit code to extend sign of dividend from the A register to edx:eax
 	emit("", "cdq", "", "; sign extend dividend from eax to edx:eax");
 	// emit code to perform a register-memory division
-	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand1 + " div a");
+	emit("", "idiv", "dword [" + op1internalName + "]", "; AReg = " + operand2 + " div " + operand1);
 	emit("", "xchg", "eax,edx", "; exchange quotient and remainder");
 
 	// deassign all temporaries involved in the addition and free those names for reuse
@@ -1512,7 +1512,7 @@ void Compiler::emitNegationCode(string operand1, string operand2)           // -
 	{
 		// load operand1 into the a register.
 		string internalName = symbolTable.at(operand1).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand1 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand1;	
 	}
 
@@ -1564,7 +1564,7 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 	{
 		// load operand1 into the a register.
 		string internalName = symbolTable.at(operand1).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand1 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand1;	
 	}
 
@@ -1617,7 +1617,7 @@ void Compiler::emitAndCode(string operand1, string operand2)            // op2 &
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
@@ -1684,7 +1684,7 @@ void Compiler::emitOrCode(string operand1, string operand2)             // op2 |
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
@@ -1752,7 +1752,7 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
@@ -1854,7 +1854,7 @@ void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 !
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
@@ -1950,7 +1950,7 @@ void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
@@ -2052,7 +2052,7 @@ void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
@@ -2148,7 +2148,7 @@ void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
@@ -2250,7 +2250,7 @@ void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) //
 	{
 		// load operand2 into a
 		string internalName = symbolTable.at(operand2).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand2 + "in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
 		contentsOfAReg = operand2;	
 	}
 	
