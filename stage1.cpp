@@ -277,7 +277,7 @@ void Compiler::createListingHeader()
 	string names = "CODY DIGBY, MITCHELL MARTIN";
 	
 	// The following needs to be sent to the listing file.";
-	listingFile << "STAGE0:" << "  " << names << "      " << ctime(&now)<< endl; 
+	listingFile << "STAGE1:" << "  " << names << "      " << ctime(&now)<< endl; 
 	listingFile << "LINE NO." << "              " << "SOURCE STATEMENT" << "\n";
 	listingFile << "\n";
 }
@@ -2373,9 +2373,13 @@ void Compiler::assignStmt() // stage 1, production 4
 	nextToken();
 	express();
 	
+	
 	if (token != ";")
 	{
-		processError("semicolon expected");
+		string allTypes = "\"*\", \"and\", \"div\", \"mod\", \")\", ";
+		allTypes += "\"+\", \"-\", \";\", \"<\", ";
+		allTypes += "\"<=\", \"<>\", \"=\", \">\", \">=\", or \"or\" expected";
+		processError("one of " + (allTypes));
 	}
 
 	popOperatorStr = popOperator();
