@@ -1206,9 +1206,9 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 }
 void Compiler::emitAdditionCode(string operand1, string operand2)       // op2 +  op1			
 {
-	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
+	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
-		processError("illegal type");
+		processError("binary '+' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
@@ -1268,9 +1268,9 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 {
 	// Look at test case 147.asm
 	
-	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
+	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
-		processError("illegal type");
+		processError("binary '-' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand2))
@@ -1315,7 +1315,7 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 
 void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *  op1			
 {
-	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
+	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
 		processError("illegal type");
 	}
