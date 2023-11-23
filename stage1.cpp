@@ -1722,7 +1722,7 @@ void Compiler::emitOrCode(string operand1, string operand2)             // op2 |
 
 void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 == op1			
 {
-	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
+	if (((whichType(operand1) != (whichType(operand2)))))
 	{
 		processError("incompatible types");
 	}
@@ -1824,7 +1824,7 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 
 void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 != op1			
 {
-	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
+	if (((whichType(operand1) != (whichType(operand2)))))
 	{
 		processError("incompatible types");
 	}
@@ -1926,7 +1926,7 @@ void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 !
 
 void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <  op1			
 {
-	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
+	if ((whichType(operand1) != (whichType(operand2))))
 	{
 		processError("incompatible types");
 	}
@@ -2022,7 +2022,7 @@ void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <
 
 void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op2 <= op1		
 {
-	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
+	if ((whichType(operand1) != (whichType(operand2))))
 	{
 		processError("incompatible types");
 	}
@@ -2124,7 +2124,7 @@ void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op
 
 void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >  op1			
 {
-	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
+	if ((whichType(operand1) != (whichType(operand2))))
 	{
 		processError("incompatible types");
 	}
