@@ -328,7 +328,7 @@ storeTypes Compiler::whichType(string name) //tells which data type a name has
     {
 		if (isNonKeyId(name))
 		{
-			processError("reference to undefined constant " + (name));
+			processError("reference to undefined symbol " + (name));
 		}
 		else
 		{
@@ -1169,7 +1169,7 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 	// if types of operands are not the same
 	if (whichType(operand1) != whichType(operand2))
 	{
-		processError("incompatible types");
+		processError("incompatible types for operator ':='");
 	}
 	// if storage mode of operand2 is not VARIABLE
 	if (symbolTable.at(operand2).getMode() != VARIABLE)
