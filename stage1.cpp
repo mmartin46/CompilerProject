@@ -1582,7 +1582,7 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 	push the name of the result onto operandStk
 	*/
 	contentsOfAReg = getTemp();
-	symbolTable.at(contentsOfAReg).setDataType(INTEGER);
+	symbolTable.at(contentsOfAReg).setDataType(BOOLEAN);
 	pushOperand(contentsOfAReg);
 }
 
@@ -1590,7 +1590,7 @@ void Compiler::emitAndCode(string operand1, string operand2)            // op2 &
 {
 	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
 	{
-		processError("illegal type");
+		processError("binary 'and' requires boolean operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
