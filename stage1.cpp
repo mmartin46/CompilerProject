@@ -1406,7 +1406,7 @@ void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /
 	//  emit code to extend sign of dividend from the A register to edx:eax
 	emit("", "cdq", "", "; sign extend dividend from eax to edx:eax");
 	// emit code to perform a register-memory division
-	emit("", "idiv", "dword[" + op1internalName + "]", "; AReg = " + operand2 + " div " + operand1);
+	emit("", "idiv", "dword [" + op1internalName + "]", "; AReg = " + operand2 + " div " + operand1);
 
 	// deassign all temporaries involved in the addition and free those names for reuse
 	if (isTemporary(operand1))
@@ -1769,11 +1769,11 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 	}
 	else
 	{
-		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand2 + " and " + operand1);
 	}
 
 	//  emit code to jump if equal to the next available Ln (call getLabel)
-	emit("", "je", label1, "; if " + operand1 + " = " + operand2 + " then jump to set eax to TRUE");
+	emit("", "je", label1, "; if " + operand2 + " = " + operand1 + " then jump to set eax to TRUE");
 	
 	//  emit code to load FALSE into the A register
 	emit("", "mov", "eax,[FALSE]", "; else set eax to FALSE");
@@ -1871,11 +1871,11 @@ void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 !
 	}
 	else
 	{
-		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand2 + " and " + operand1);
 	}
 
 	//  emit code to jump if equal to the next available Ln (call getLabel)
-	emit("", "jne", label1, "; if " + operand1 + " <> " + operand2 + " then jump to set eax to TRUE");
+	emit("", "jne", label1, "; if " + operand2 + " <> " + operand1 + " then jump to set eax to TRUE");
 	
 	//  emit code to load FALSE into the A register
 	emit("", "mov", "eax,[FALSE]", "; else set eax to FALSE");
@@ -1967,11 +1967,11 @@ void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <
 	}
 	else
 	{
-		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand2 + " and " + operand1);
 	}
 
 	//  emit code to jump if equal to the next available Ln (call getLabel)
-	emit("", "jl", label1, "; if " + operand1 + " < " + operand2 + " then jump to set eax to TRUE");
+	emit("", "jl", label1, "; if " + operand2 + " < " + operand1 + " then jump to set eax to TRUE");
 	
 	//  emit code to load FALSE into the A register
 	emit("", "mov", "eax,[FALSE]", "; else set eax to FALSE");
@@ -2069,11 +2069,11 @@ void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op
 	}
 	else
 	{
-		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand2 + " and " + operand1);
 	}
 
 	//  emit code to jump if equal to the next available Ln (call getLabel)
-	emit("", "jle", label1, "; if " + operand1 + " <= " + operand2 + " then jump to set eax to TRUE");
+	emit("", "jle", label1, "; if " + operand2 + " <= " + operand1 + " then jump to set eax to TRUE");
 	
 	//  emit code to load FALSE into the A register
 	emit("", "mov", "eax,[FALSE]", "; else set eax to FALSE");
@@ -2165,11 +2165,11 @@ void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >
 	}
 	else
 	{
-		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand2 + " and " + operand1);
 	}
 
 	//  emit code to jump if equal to the next available Ln (call getLabel)
-	emit("", "jg", label1, "; if " + operand1 + " > " + operand2 + " then jump to set eax to TRUE");
+	emit("", "jg", label1, "; if " + operand2 + " > " + operand1 + " then jump to set eax to TRUE");
 	
 	//  emit code to load FALSE into the A register
 	emit("", "mov", "eax,[FALSE]", "; else set eax to FALSE");
@@ -2267,11 +2267,11 @@ void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) //
 	}
 	else
 	{
-		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand1 + " and " + operand2);
+		emit("", "cmp", "eax,[" + op1internalName + "]", "; compare " + operand2 + " and " + operand1);
 	}
 
 	//  emit code to jump if equal to the next available Ln (call getLabel)
-	emit("", "jge", label1, "; if " + operand1 + " >= " + operand2 + " then jump to set eax to TRUE");
+	emit("", "jge", label1, "; if " + operand2 + " >= " + operand1 + " then jump to set eax to TRUE");
 	
 	//  emit code to load FALSE into the A register
 	emit("", "mov", "eax,[FALSE]", "; else set eax to FALSE");
