@@ -1324,7 +1324,7 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 		(contentsOfAReg != operand2))
 	{
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1387,7 +1387,7 @@ void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1441,7 +1441,7 @@ void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1497,7 +1497,7 @@ void Compiler::emitNegationCode(string operand1, string operand2)           // -
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1549,7 +1549,7 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1602,7 +1602,7 @@ void Compiler::emitAndCode(string operand1, string operand2)            // op2 &
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1669,7 +1669,7 @@ void Compiler::emitOrCode(string operand1, string operand2)             // op2 |
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1736,7 +1736,7 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1838,7 +1838,7 @@ void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 !
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -1885,7 +1885,11 @@ void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 !
 	{
 		symbolTable.insert({"false", SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, "0", YES, 1)}); 
 	}
-	
+	// 115.dat (Adding true)
+	if (symbolTable.find("true") == symbolTable.end())
+	{
+		symbolTable.insert({"true", SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, "-1", YES, 1)}); 
+	}
 	
 	//  emit code to perform an unconditional jump to the next label (call getLabel should be L(n+1))
 	emit("", "jmp", label2, "; unconditionally jump");
@@ -1940,7 +1944,7 @@ void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -2036,7 +2040,7 @@ void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; assign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -2138,7 +2142,7 @@ void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
@@ -2234,7 +2238,7 @@ void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) //
 		deassign it
 		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
-		emit("", "mov", "[" +  tempAInternalName + "],eax", "; " + contentsOfAReg + " = AReg");
+		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
