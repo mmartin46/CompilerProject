@@ -1183,7 +1183,7 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 	if (contentsOfAReg != operand1)
 	{
 		string internalName = symbolTable.at(operand1).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; load " + operand1 + " in eax");
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand1);
 		contentsOfAReg = operand1;
 	}
 
@@ -1512,7 +1512,7 @@ void Compiler::emitNegationCode(string operand1, string operand2)           // -
 	{
 		// load operand1 into the a register.
 		string internalName = symbolTable.at(operand1).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand1);
 		contentsOfAReg = operand1;	
 	}
 
@@ -1564,7 +1564,7 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 	{
 		// load operand1 into the a register.
 		string internalName = symbolTable.at(operand1).getInternalName();
-		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand2);
+		emit("", "mov", "eax,[" + internalName + "]", "; AReg = " + operand1);
 		contentsOfAReg = operand1;	
 	}
 
