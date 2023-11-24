@@ -864,6 +864,10 @@ void Compiler::beginEndStmt()
 	}
 	if (token != "end")
 	{
+		if (!isNonKeyId(token))
+		{
+			processError("non_key_id, \"read\", or \"write\" expected");
+		}
 		processError("keyword \"end\" expected ->(" + (token) + ")");
 	}
 	nextToken();
@@ -2382,7 +2386,8 @@ void Compiler::assignStmt() // stage 1, production 4
 	
 	if (token != ":=")
 	{
-		processError("expected \":=\" for assignment statement");
+		// 154.dat
+		processError("\":=\" expected for assignment statement");
 	}
 	pushOperator(token);
 	nextToken();
@@ -2391,6 +2396,7 @@ void Compiler::assignStmt() // stage 1, production 4
 	
 	if (token != ";")
 	{
+		// DEBUG for 143.dat
 		string allTypes = "\"*\", \"and\", \"div\", \"mod\", \")\", ";
 		allTypes += "\"+\", \"-\", \";\", \"<\", ";
 		allTypes += "\"<=\", \"<>\", \"=\", \">\", \">=\", or \"or\" expected";
@@ -2413,14 +2419,14 @@ void Compiler::readStmt() // stage 1, production 5
 	
 	if (token != "(")
 	{
-		processError("\"(\" expected (for read statements)");
+		processError("\"(\" expected after read");
 	}
 	
 	nextToken();
 	string tempIDs = ids();
 	if (token != ")")
 	{
-		processError("\")\" expected");
+		processError("\")\" expected are non_key_id in \"read\"");
 	}
 	code("read", tempIDs);
 	nextToken();
@@ -2441,7 +2447,7 @@ void Compiler::writeStmt() // stage 1, production 7
 	
 	if (token != "(")
 	{
-		processError("\"(\" expected (for write statements)");
+		processError("\"(\" expected after \"write\"");
 	}
 	
 	// nextList
