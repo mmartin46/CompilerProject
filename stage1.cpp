@@ -202,6 +202,8 @@ bool Compiler::isInteger(string s) const  // determines if s is an integer
 	if (s.front() == '+' || s.front() == '-')
 	{
 		// 114.dat
+		// The problem was that isInteger()
+		// returned true for '+' or '-'
 		if (s.size() == 1)
 		{
 			return false;
