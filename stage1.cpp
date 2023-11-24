@@ -2664,6 +2664,12 @@ void Compiler::part() // stage 1, production 15
 		pushOperand(token);
 		nextToken();
 	}
+	else
+	{
+		// 143.dat fixed (follow the SELECTS)
+		// Turns out I actually forgot to put this else branch.
+		processError("expected non_key_id, integer, \"not\", \"true\", \"false\", '(', '+', or '-'");
+	}
 }
 
 // ::
