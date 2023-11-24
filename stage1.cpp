@@ -1099,7 +1099,7 @@ void Compiler::emitReadCode(string operand1, string operand2)
 		{
 			if (symbolTable.find(name) == symbolTable.end())
 			{
-				processError("reference to undefined symbol");
+				processError("reference to undefined variable '" + (name) + "'");
 			}
 			if (whichType(name) != INTEGER)
 			{
@@ -1144,7 +1144,7 @@ void Compiler::emitWriteCode(string operand1, string operand2)
 			name = name.substr(0, 15);
 			if (symbolTable.find(name) == symbolTable.end())
 			{
-				processError("reference to undefined symbol");
+				processError("reference to undefined variable '" + (name) + "'");
 			}
 			// name is not in the A register.
 			if (contentsOfAReg != name)
@@ -2653,7 +2653,7 @@ void Compiler::part() // stage 1, production 15
 		express();
 		if (token != ")")
 		{
-			processError("no matching closing parenthesis");
+			processError("')' expected");
 		}
 		// VALID / NEXT PART
 		nextToken();
@@ -2733,6 +2733,7 @@ void Compiler::pushOperand(string name) //push name onto operandStk
     }
     else
     {
+		name = name.substr(0, 15);
     	insert(name, whichType(name), CONSTANT, name, YES, 1);
     }
   }
