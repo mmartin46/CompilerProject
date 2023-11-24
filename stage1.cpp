@@ -1390,9 +1390,10 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 
 void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /  op1			
 {
-	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
+	// 168.dat
+	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
-		processError("illegal type");
+		processError("binary 'div' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) && (operand2 != contentsOfAReg))
 	{
@@ -1444,9 +1445,9 @@ void Compiler::emitDivisionCode(string operand1, string operand2)       // op2 /
 
 void Compiler::emitModuloCode(string operand1, string operand2)         // op2 %  op1			
 {
-	if ((whichType(operand1) != INTEGER) && (whichType(operand2) != INTEGER))
+	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
-		processError("illegal type");
+		processError("binary 'mod' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) && (operand2 != contentsOfAReg))
 	{
@@ -1501,7 +1502,7 @@ void Compiler::emitNegationCode(string operand1, string operand2)           // -
 {
 	if ((whichType(operand1) != INTEGER))
 	{
-		processError("illegal type");
+		processError("unary '-' requires an integer operand");
 	}
 	// if the a reg is a temp store it in memory
 	if (isTemporary(contentsOfAReg) && (operand1 != contentsOfAReg))
@@ -1553,7 +1554,7 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 {
 	if ((whichType(operand1) != BOOLEAN))
 	{
-		processError("illegal type");
+		processError("unary 'not' requires a boolean operand");
 	}
 	// if the a reg is a temp store it in memory
 	if (isTemporary(contentsOfAReg) && (operand1 != contentsOfAReg))
@@ -1740,7 +1741,7 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 {
 	if (((whichType(operand1) != (whichType(operand2)))))
 	{
-		processError("incompatible types");
+		processError("binary '=' requires operands of the same type");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
@@ -1842,9 +1843,10 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 
 void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 != op1			
 {
+	// 172.dat
 	if (((whichType(operand1) != (whichType(operand2)))))
 	{
-		processError("incompatible types");
+		processError("binary '<>' requires operands of the same type");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
@@ -1948,9 +1950,10 @@ void Compiler::emitInequalityCode(string operand1, string operand2)     // op2 !
 
 void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <  op1			
 {
+	// 173.dat
 	if ((whichType(operand1) != (whichType(operand2))))
 	{
-		processError("incompatible types");
+		processError("binary '<' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
@@ -2044,9 +2047,10 @@ void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <
 
 void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op2 <= op1		
 {
+	// 174.dat
 	if ((whichType(operand1) != (whichType(operand2))))
 	{
-		processError("incompatible types");
+		processError("binary '<=' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
@@ -2146,9 +2150,10 @@ void Compiler::emitLessThanOrEqualToCode(string operand1, string operand2) // op
 
 void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >  op1			
 {
+	// 175.dat
 	if ((whichType(operand1) != (whichType(operand2))))
 	{
-		processError("incompatible types");
+		processError("binary '>' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
@@ -2244,7 +2249,8 @@ void Compiler::emitGreaterThanOrEqualToCode(string operand1, string operand2) //
 {
 	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
-		processError("incompatible types");
+		// 176.dat
+		processError("binary '>=' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
