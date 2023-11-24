@@ -1327,7 +1327,8 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 {
 	if ((whichType(operand1) != INTEGER) || (whichType(operand2) != INTEGER))
 	{
-		processError("illegal type");
+		// 167.dat
+		processError("binary '*' requires integer operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
