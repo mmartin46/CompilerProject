@@ -1586,6 +1586,16 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 	// emit code to perform a register-memory negatation
 	emit("", "not", "eax", "; AReg = !AReg");
 
+	if (symbolTable.find("true") == symbolTable.end())
+	{
+		symbolTable.insert({"true", SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, "-1", YES, 1)}); 
+	}
+	// 135.dat ?
+	if (symbolTable.find("false") == symbolTable.end())
+	{
+		symbolTable.insert({"false", SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, "0", YES, 1)}); 
+	}
+
 	// deassign all temporaries involved in the addition and free those names for reuse
 	if (isTemporary(operand1))
 	{
@@ -1814,6 +1824,8 @@ void Compiler::emitEqualityCode(string operand1, string operand2)       // op2 =
 	{
 		symbolTable.insert({"true", SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, "-1", YES, 1)}); 
 	}
+
+	
 	
 	//  emit code to label the next instruction with the second acquired label L(n+1)
 	emit(label2 + ":", "", "", "");
@@ -2565,13 +2577,21 @@ void Compiler::part() // stage 1, production 15
 		else if (isBoolean(token))
 		{
 			// VALID / NEXT PART	
+
+			// 135.asm
+			// I ended up using code() directly
+			// instead of pushing like the
+			// grammar explains.
+			// (Misunderstanding of the grammar)
+			
+			// BOOLEANx pushOperand(not x; i.e., 'true' or 'false')
 			if (token == "true")
 			{
-				code("not", "true");
+				pushOperand("false");
 			}
 			else
 			{
-				code("not", "false");
+				pushOperand("true");
 			}
 			nextToken();
 		}
