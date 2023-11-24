@@ -201,6 +201,11 @@ bool Compiler::isInteger(string s) const  // determines if s is an integer
 	// If there is a + or -.
 	if (s.front() == '+' || s.front() == '-')
 	{
+		// 114.dat
+		if (s.size() == 1)
+		{
+			return false;
+		}
 		++i;
 	}
 	// Checks if the current element is a digit
@@ -2626,7 +2631,7 @@ void Compiler::part() // stage 1, production 15
 		else
 		{
 			// 163.dat
-			processError("expected '(', integer, or non-keyword id"); 
+			processError("expected '(', integer, or non-keyword id; found " + (token)); 
 		}
 	}
 	else if ((token == "-"))
