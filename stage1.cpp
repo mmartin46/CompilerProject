@@ -2636,7 +2636,8 @@ void Compiler::part() // stage 1, production 15
 		}
 		else
 		{
-			processError("integer expected after after \"-\""); 
+			// 165.dat
+			processError("expected '(', integer, or non_key_id"); 
 		}
 	}
 	else if (token == "(")
