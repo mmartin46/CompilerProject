@@ -424,29 +424,29 @@ void Compiler::code(string op, string operand1, string operand2)
   {
 	 emitEqualityCode(operand1, operand2);
   }
-  else if (op == ":=")
-  {
-   	 emitAssignCode(operand1, operand2);
-  }
-  else if (op == "<>")
-  {
-  	 emitInequalityCode(operand1, operand2);
-  }
   else if (op == "<")
   {
   	 emitLessThanCode(operand1, operand2);
-  }
-  else if (op == "<=")
-  {
-  	 emitLessThanOrEqualToCode(operand1, operand2);
   }
   else if (op == ">")
   {
      emitGreaterThanCode(operand1, operand2);
   }
+  else if (op == "<=")
+  {
+  	 emitLessThanOrEqualToCode(operand1, operand2);
+  }
   else if (op == ">=")
   {
   	 emitGreaterThanOrEqualToCode(operand1, operand2);
+  }
+  else if (op == "<>")
+  {
+  	 emitInequalityCode(operand1, operand2);
+  }
+  else if (op == ":=")
+  {
+   	 emitAssignCode(operand1, operand2);
   }
   else
   {
