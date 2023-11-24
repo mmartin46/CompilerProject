@@ -1166,6 +1166,8 @@ void Compiler::emitWriteCode(string operand1, string operand2)
 // Page 19
 void Compiler::emitAssignCode(string operand1, string operand2)         // op2 = op1			
 {
+	
+	
 	// if types of operands are not the same
 	if (whichType(operand1) != whichType(operand2))
 	{
@@ -1192,10 +1194,10 @@ void Compiler::emitAssignCode(string operand1, string operand2)         // op2 =
 	operand2
 	set the contentsOfAReg = operand2
 	*/
-	string op1internalName = symbolTable.at(operand1).getInternalName();
 	string op2internalName = symbolTable.at(operand2).getInternalName();
 	emit("", "mov", "[" + op2internalName + "],eax", "; " + operand2 + " = AReg");
 	contentsOfAReg = operand2;
+
 
 	// if operand1 is a temp then free its name for reuse
 	// operand2 can never be a temporary since it is to the left of ':='
@@ -2592,13 +2594,7 @@ void Compiler::part() // stage 1, production 15
 			// VALID / NEXT PART
 			nextToken();
 		}
-		else if (isInteger(token))
-		{
-			// VALID / NEXT PART
-			pushOperand(token);
-			nextToken();
-		}
-		else if (isNonKeyId(token))
+		else if (isInteger(token) || isNonKeyId(token))
 		{
 			// VALID / NEXT PART
 			pushOperand(token);
@@ -2606,7 +2602,7 @@ void Compiler::part() // stage 1, production 15
 		}
 		else
 		{
-			processError("integer expected after after \"+\""); 
+			processError("expected '(', integer, or non-keyword id; found " + token); 
 		}
 	}
 	else if ((token == "-"))
@@ -2668,7 +2664,7 @@ void Compiler::freeTemp()
     currentTempNo--;
     if (currentTempNo < -1)
     {
-    	string err = "compiler error, " + to_string(currentTempNo) + "should be >= -1";
+    	string err = "compiler error, " + to_string(currentTempNo) + " should be >= -1";
     	processError(err);
     }
 }
@@ -2716,11 +2712,15 @@ void Compiler::pushOperand(string name) //push name onto operandStk
   {
   	if (name == "true")
     {
-    	insert("TRUE", BOOLEAN, CONSTANT, name, YES, 1);
+		// 116.dat fix
+		symbolTable.insert( {name, SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, name, YES, 1)} );
+    	//insert("TRUE", BOOLEAN, CONSTANT, name, YES, 1);
     }
     else if (name == "false")
     {
-    	insert("FALSE", BOOLEAN, CONSTANT, name, YES, 1);
+		// 116.dat fix
+		symbolTable.insert( {name, SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, name, YES, 1)} );
+    	//insert("FALSE", BOOLEAN, CONSTANT, name, YES, 1);
     }
     else
     {
