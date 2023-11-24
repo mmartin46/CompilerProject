@@ -1586,15 +1586,6 @@ void Compiler::emitNotCode(string operand1, string operand2)                // !
 	// emit code to perform a register-memory negatation
 	emit("", "not", "eax", "; AReg = !AReg");
 
-	if (symbolTable.find("true") == symbolTable.end())
-	{
-		symbolTable.insert({"true", SymbolTableEntry("TRUE", BOOLEAN, CONSTANT, "-1", YES, 1)}); 
-	}
-	// 135.dat ?
-	if (symbolTable.find("false") == symbolTable.end())
-	{
-		symbolTable.insert({"false", SymbolTableEntry("FALSE", BOOLEAN, CONSTANT, "0", YES, 1)}); 
-	}
 
 	// deassign all temporaries involved in the addition and free those names for reuse
 	if (isTemporary(operand1))
@@ -2467,7 +2458,7 @@ void Compiler::writeStmt() // stage 1, production 7
 	
 	if (token != ")")
 	{
-		processError("\")\" expected");
+		processError("',' or ')' expected after non-keyword identifier");
 	}
 	
 	code("write", tempIDs);
