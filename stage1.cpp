@@ -2377,7 +2377,6 @@ void Compiler::assignStmt() // stage 1, production 4
 {
 	string popOperatorStr, popOperand1, popOperand2;
 
-	// THE BUG IS WITHIN PUSHOPERAND 101.dat
 	if (isNonKeyId(token))
 	{
 		pushOperand(token);
@@ -2396,7 +2395,7 @@ void Compiler::assignStmt() // stage 1, production 4
 	
 	if (token != ";")
 	{
-		// DEBUG for 143.dat
+		// 143.dat
 		string allTypes = "\"*\", \"and\", \"div\", \"mod\", \")\", ";
 		allTypes += "\"+\", \"-\", \";\", \"<\", ";
 		allTypes += "\"<=\", \"<>\", \"=\", \">\", \">=\", or \"or\" expected";
