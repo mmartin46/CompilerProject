@@ -1296,9 +1296,21 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand2))
 	{
+		/*
+		emit code to store that temp into memory
+		 change the allocate entry for the temp in the symbol table to yes
+		 deassign it
+		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
 		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
+		contentsOfAReg = "";
+	}
+	// if the A register holds a non-temp not operand1 nor operand2 then deassign it
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
 		contentsOfAReg = "";
 	}
 	if ((contentsOfAReg != operand2))
@@ -1345,11 +1357,17 @@ void Compiler::emitMultiplicationCode(string operand1, string operand2) // op2 *
 		(contentsOfAReg != operand1) &&
 		(contentsOfAReg != operand2))
 	{
+		/*
+		emit code to store that temp into memory
+		 change the allocate entry for the temp in the symbol table to yes
+		 deassign it
+		*/
 		string tempAInternalName = symbolTable.at(contentsOfAReg).getInternalName(); 
 		emit("", "mov", "[" +  tempAInternalName + "],eax", "; deassign AReg");
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
+	// if the A register holds a non-temp not operand1 nor operand2 then deassign it
 	if (!isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
 		(contentsOfAReg != operand2))
