@@ -1313,6 +1313,7 @@ void Compiler::emitSubtractionCode(string operand1, string operand2)    // op2 -
 	{
 		contentsOfAReg = "";
 	}
+	// The lhs is being subtracted.
 	if ((contentsOfAReg != operand2))
 	{
 		string internalName = symbolTable.at(operand2).getInternalName();
