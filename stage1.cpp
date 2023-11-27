@@ -26,8 +26,8 @@ void Compiler::parser()
 
 void Compiler::processError(string err)
 {
-	listingFile << endl;
-	listingFile << "Error: Line " << lineNo << ": " << err << endl << endl;
+	//listingFile << endl;
+	listingFile << "\nError: Line " << lineNo << ": " << err << endl << endl;
 	++errorCount;
 	// Error count needs to be a zero or a one.
 	if (errorCount > 0)
@@ -1681,7 +1681,7 @@ void Compiler::emitOrCode(string operand1, string operand2)             // op2 |
 {
 	if ((whichType(operand1) != BOOLEAN) || (whichType(operand2) != BOOLEAN))
 	{
-		processError("illegal type");
+		processError("binary 'or' requires boolean operands");
 	}
 	if (isTemporary(contentsOfAReg) &&
 		(contentsOfAReg != operand1) &&
@@ -1976,7 +1976,13 @@ void Compiler::emitLessThanCode(string operand1, string operand2)       // op2 <
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
-
+	//  if the A register holds a non-temp not operand2 nor operand1 then deassign it
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
 	if ((contentsOfAReg != operand1) &&
 		(contentsOfAReg != operand2))
 	{
@@ -2176,7 +2182,13 @@ void Compiler::emitGreaterThanCode(string operand1, string operand2)    // op2 >
 		symbolTable.at(contentsOfAReg).setAlloc(YES);
 		contentsOfAReg = "";
 	}
-
+	//  if the A register holds a non-temp not operand2 nor operand1 then deassign it
+	if (!isTemporary(contentsOfAReg) &&
+		(contentsOfAReg != operand1) &&
+		(contentsOfAReg != operand2))
+	{
+		contentsOfAReg = "";
+	}
 	if ((contentsOfAReg != operand1) &&
 		(contentsOfAReg != operand2))
 	{
