@@ -2472,7 +2472,7 @@ void Compiler::readStmt() // stage 1, production 5
 	string tempIDs = ids();
 	if (token != ")")
 	{
-		processError("\")\" expected are non_key_id in \"read\"");
+		processError("\")\" expected after non_key_id in \"read\"");
 	}
 	code("read", tempIDs);
 	nextToken();
