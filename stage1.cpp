@@ -875,7 +875,7 @@ void Compiler::beginEndStmt()
 		{
 			processError("non_key_id, \"read\", or \"write\" expected");
 		}
-		processError("keyword \"end\" expected ->(" + (token) + ")");
+		processError("keyword \"end\" expected");
 	}
 	nextToken();
 	if (token != ".")
